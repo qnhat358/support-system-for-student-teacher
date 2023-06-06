@@ -1,0 +1,78 @@
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  avatar_url TEXT,
+  fullname TEXT NOT NULL,
+  phone TEXT,
+  birthday DATE,
+  username TEXT NOT NULL,
+  password TEXT NOT NULL,
+  type TEXT NOT NULL,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE exams (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users (id),
+  topic TEXT NOT NULL,
+  duration INTEGER NOT NULL,
+  isPublic BOOLEAN NOT NULL,
+  date DATE,
+  exam_start TIME,
+  exam_end TIME,
+  total_point INTEGER NOT NULL,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE questions (
+  id SERIAL PRIMARY KEY,
+  exam_id INTEGER REFERENCES exams (id),
+  user_id INTEGER REFERENCES users (id),
+  type TEXT NOT NULL,
+  content TEXT NOT NULL,
+  point INTEGER NOT NULL,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE answers (
+  id SERIAL PRIMARY KEY,
+  question_id INTEGER REFERENCES questions (id),
+  content TEXT,
+  isCorrect BOOLEAN,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE results (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users (id),
+  exam_id INTEGER REFERENCES exams (id),
+  total_point INTEGER DEFAULT 0,
+  time_start TIMESTAMP NOT NULL,
+  time_end TIMESTAMP NOT NULL,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE refresh_tokens (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users (id),
+  token TEXT NOT NULL,
+  expires_at TIMESTAMP,
+  is_deleted BOOLEAN DEFAULT 'f',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP
+);
