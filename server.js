@@ -20,13 +20,11 @@ app.use(handleResponse)
 app.use(express.static('public'));
 app.use('/api', apiRouter);
 
-
 // global error handler
 
 app.listen(port, () => {
   console.log(`Production server running at http://localhost:${port}`);
 });
-
 // if (process.env.NODE_ENV === 'development') {
 //   const vite = require('vite');
 //   const config = require('./vite.config');

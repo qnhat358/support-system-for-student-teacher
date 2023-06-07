@@ -3,11 +3,11 @@ const { httpErrorTransform } = require('../app/utils/httpCodes');
 const { InternalServerException } = require('../app/exceptions');
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'easyquiz_db',
-  password: 'chaubacho',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 })
 
 const executeQuery = async (query, params = []) => {
