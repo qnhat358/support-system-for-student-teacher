@@ -11,6 +11,41 @@ const { exam, getTotalPoints } = storeToRefs(useExamStore());
 const router = useRouter();
 const isShowModal = ref(false);
 
+const topicOption = [
+  {
+    option: 'Mathematics',
+    value: 'mathematics',
+  },
+  {
+    option: 'Literature',
+    value: 'literature',
+  },
+  {
+    option: 'History',
+    value: 'history',
+  },
+  {
+    option: 'Physics',
+    value: 'physics',
+  },
+  {
+    option: 'Chemistry',
+    value: 'chemistry',
+  },
+  {
+    option: 'English',
+    value: 'english',
+  },
+  {
+    option: 'Informatics',
+    value: 'informatics',
+  },
+  {
+    option: 'Biology',
+    value: 'biology',
+  },
+]
+
 const handleClear = () => {
   exam.value.questions = [];
 }
@@ -54,11 +89,8 @@ const handleSubmit = async () => {
           <div class="font-semibold flex justify-between items-center">
             <label for="examTopic" class="min-w-fit">Exam topic:</label>
             <select id="examTopic" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="exam.topic">
-              <option value="">Choose a topic</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option value="" disabled>Choose a topic</option>
+              <option v-for="(topic, index) in topicOption" :value="topic.value">{{ topic.option }}</option>
             </select>
           </div>
           <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">

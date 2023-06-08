@@ -107,4 +107,14 @@ export default [
     },
     component: () => import("../views/LoginRegisterView.vue"),
   },
+  {
+    path: "/waiting-room",
+    name: "waitingRoom",
+    meta: {
+      layout: "DefaultLayout",
+      title: "Shpock  | The Joy of Selling",
+      requiresAuth: true,
+    },
+    component: () => import("../views/WaitingRoomView.vue"),
+  },
 ];

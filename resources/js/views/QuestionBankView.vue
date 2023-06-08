@@ -112,7 +112,7 @@ const allTests = ref([
     ]
   },
   {
-    topic: 'Literature',
+    topic: 'History',
     test: [
       {
         content: 'Content 1',
@@ -145,7 +145,7 @@ const allTests = ref([
     ]
   },
   {
-    topic: 'Literature',
+    topic: 'Physics',
     test: [
       {
         content: 'Content 1',
@@ -178,7 +178,7 @@ const allTests = ref([
     ]
   },
   {
-    topic: 'Literature',
+    topic: 'Chemistry',
     test: [
       {
         content: 'Content 1',
@@ -211,7 +211,7 @@ const allTests = ref([
     ]
   },
   {
-    topic: 'Literature',
+    topic: 'Informatics',
     test: [
       {
         content: 'Content 1',
@@ -244,7 +244,7 @@ const allTests = ref([
     ]
   },
   {
-    topic: 'Literature',
+    topic: 'English',
     test: [
       {
         content: 'Content 1',
@@ -315,21 +315,9 @@ useDetectOutsideClick(dropdownRef, () => {
             class="absolute top-full mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
               <li>
-                <button type="button"
+                <button v-for="(topic,index) in topics" type="button"
                   class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  @click="changeTopic('Math')">Math</button>
-              </li>
-              <li>
-                <button type="button"
-                  class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">English</button>
-              </li>
-              <li>
-                <button type="button"
-                  class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
-              </li>
-              <li>
-                <button type="button"
-                  class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
+                  @click="changeTopic(topic.name)">{{ topic.name }}</button>
               </li>
             </ul>
           </div>
