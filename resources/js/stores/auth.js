@@ -44,9 +44,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
     },
 
     async register () {
@@ -62,9 +60,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
     },
 
     async logout () {
@@ -80,16 +76,14 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
     },
 
     async refreshToken () {
       const { setLoadingModal } = useLoaderStore();
       setLoadingModal(true);
       try {
-        // axios.defaults.withCredentials = true;
+        axios.defaults.withCredentials = true;
         const response = await axios.post(
           `http://127.0.0.1:3000/api${REFRESH_URL}`
         );
@@ -98,9 +92,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
     },
   },
 })

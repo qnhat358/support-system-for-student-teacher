@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import http from '../services/http'
 import { useLoaderStore } from "@/stores/loader";
 
-import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL } from '../services/apiUrls'
+import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL, EXAM_BY_ID_URL, QUESTION_BY_EXAM_ID_URL, JOIN_EXAM_URL } from '../services/apiUrls'
 export const useExamStore = defineStore('exam', {
   state: () => ({
     exam: {
@@ -43,16 +43,15 @@ export const useExamStore = defineStore('exam', {
       const { setLoadingModal } = useLoaderStore();
       setLoadingModal(true);
       try {
+        const { id, ...others } = this.exam;
         const response = await http.post(
-          `${CREATE_EXAM_URL}`, { ...this.exam, totalPoint: this.getTotalPoints }
+          `${CREATE_EXAM_URL}`, { ...others, totalPoint: this.getTotalPoints }
         );
         this.exam.id = response.data.data.id;
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+        finally { setLoadingModal(false); }
     },
     async fetchExamsByUserId (id) {
       const { setLoadingModal } = useLoaderStore();
@@ -65,9 +64,7 @@ export const useExamStore = defineStore('exam', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+        finally { setLoadingModal(false); }
     },
     async fetchExamDetailById (id) {
       const { setLoadingModal } = useLoaderStore();
@@ -80,9 +77,47 @@ export const useExamStore = defineStore('exam', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
+    },
+    async fetchExamById (id) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${EXAM_BY_ID_URL}`.replace(":id", id)
+        );
+        this.exam = response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+    async fetchQuestionByExamId (id) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${QUESTION_BY_EXAM_ID_URL}`.replace(":id", id)
+        );
+        this.exam.questions = response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+
+    async joinExam (id) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${JOIN_EXAM_URL}`.replace(":id", id)
+        );
+        return response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
     },
   },
 })

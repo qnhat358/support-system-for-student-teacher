@@ -42,6 +42,36 @@ class ExamController {
       res.responseError(error)
     }
   }
+  // [GET] /exams/getById/:id
+  async getById (req, res, next) {
+    const id = req.params.id;
+    try {
+      const exams = await ExamService.getById(id);
+      res.responseSuccess(exams)
+    } catch (error) {
+      res.responseError(error)
+    }
+  }
+  // [GET] /exams/:id/questions
+  async getQuestionByExamId (req, res, next) {
+    const id = req.params.id;
+    try {
+      const exams = await ExamService.getQuestionByExamId(id);
+      res.responseSuccess(exams)
+    } catch (error) {
+      res.responseError(error)
+    }
+  }
+  // [GET] /exams/join/:id
+  async join (req, res, next) {
+    const id = req.params.id;
+    try {
+      const exams = await ExamService.join(id);
+      res.responseSuccess(exams)
+    } catch (error) {
+      res.responseError(error)
+    }
+  }
 
 }
 module.exports = new ExamController();

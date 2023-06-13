@@ -26,9 +26,7 @@ export const useUserStore = defineStore('user', {
       } catch (err) {
         console.log(err);
       }
-      setTimeout(() => {
-        setLoadingModal(false);
-      }, 1000)
+      finally { setLoadingModal(false); }
     },
   },
 })

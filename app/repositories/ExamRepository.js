@@ -4,6 +4,11 @@ class ExamRepository {
     return await DB.executeQuery("SELECT * FROM exams");
   }
 
+  async getById (id) {
+    const result = await DB.executeQuery("SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1", [id]);
+    return result[0];
+  }
+
   async create (userId, exam) {
     const query = `
       INSERT INTO exams (user_id, grade, name, topic, duration, is_public, date, exam_start, exam_end, total_point)
@@ -50,7 +55,7 @@ class ExamRepository {
     return exams;
   }
 
-  async getById (id) {
+  async getDetailById (id) {
     const query = `
   SELECT
     exams.id AS exam_id,
@@ -120,6 +125,11 @@ class ExamRepository {
       currentQuestion.answers.push(answer);
     }
     return exam;
+  }
+
+  async join (id) {
+    const result = await DB.executeQuery("SELECT COUNT(id) FROM exams WHERE id = $1 AND is_public = false", [id]);  //TODO check end before present
+    return result[0].count>0;
   }
 }
 module.exports = new ExamRepository();

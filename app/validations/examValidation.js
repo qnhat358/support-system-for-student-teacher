@@ -3,6 +3,7 @@ const Joi = require('joi');
 const createExamValidation = Joi.object({
   grade: Joi.number().required(),
   topic: Joi.string().allow('').required(),
+  name: Joi.string().required(),
   duration: Joi.string().required(),
   visibility: Joi.string().valid('public', 'private').required(),
   date: Joi.when('visibility', {

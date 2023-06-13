@@ -12,7 +12,7 @@ export default [
     name: "landing",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: false,
     },
     component: () => import("../views/LandingView.vue"),
@@ -22,7 +22,7 @@ export default [
     name: "home",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/HomeView.vue"),
@@ -32,7 +32,7 @@ export default [
     name: "profile",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/ProfileView.vue"),
@@ -42,7 +42,7 @@ export default [
     name: "createExam",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/CreateExamView.vue"),
@@ -52,7 +52,7 @@ export default [
     name: "listOfTest",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/ListOfTestView.vue"),
@@ -62,7 +62,7 @@ export default [
     name: "questionBank",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/QuestionBankView.vue"),
@@ -72,7 +72,7 @@ export default [
     name: "detailTest",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/DetailTestView.vue"),
@@ -82,7 +82,7 @@ export default [
     name: "editTest",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/EditTestView.vue"),
@@ -92,7 +92,7 @@ export default [
     name: "joinTest",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/JoinTestView.vue"),
@@ -102,7 +102,7 @@ export default [
     name: "loginRegister",
     meta: {
       layout: "FullScreenLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: false,
     },
     component: () => import("../views/LoginRegisterView.vue"),
@@ -112,7 +112,7 @@ export default [
     name: "waitingRoom",
     meta: {
       layout: "DefaultLayout",
-      title: "Shpock  | The Joy of Selling",
+      title: "EasyQuiz | Easy Learning",
       requiresAuth: true,
     },
     component: () => import("../views/WaitingRoomView.vue"),

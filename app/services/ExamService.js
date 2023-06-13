@@ -14,7 +14,21 @@ class ExamService {
 
   // [GET] /exams/getDetailById
   async getDetailById (id) {
+    return await ExamRepository.getDetailById(id);
+  }
+
+  // [GET] /exams/getById
+  async getById (id) {
     return await ExamRepository.getById(id);
+  }
+  // [GET] /exams/:id/questions
+  async getQuestionByExamId (id) {
+    return await QuestionRepository.getQuestionByExamId(id);
+  }
+
+  // [GET] /exams/join/:id
+  async join (id) {
+    return await ExamRepository.join(id);
   }
 
   // [POST] /exams/create

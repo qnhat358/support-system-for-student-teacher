@@ -1,16 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const { exam } = storeToRefs(useExamStore());
-exam.value = {
-  name: 'Exam test 1',
-  date: '07/06/2023',
-  start: '20:00',
-  end: '21:00',
-}
+const { fetchExamById } = useExamStore();
+const id = ref('');
+onMounted(async()=>{
+  id.value = route.query.id;
+  await fetchExamById(id.value);
+})
 </script>
 
 <template>
@@ -50,7 +52,7 @@ exam.value = {
         </div>
       </div>
     </div>
-    <router-link :to="{ name: 'joinTest' }"
+    <router-link :to="{ name: 'joinTest', query: {id}}"
       class="mt-10 w-[300px] p-2 bg-white text-[var(--primary)] text-2xl font-bold rounded-lg border border-[var(--primary)] shadow-lg self-center text-center">
       Start
     </router-link>

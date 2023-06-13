@@ -8,3 +8,6 @@ export const EXAM_URL = "/exams";
 export const CREATE_EXAM_URL = "/exams/create";
 export const EXAM_BY_USERID_URL = "/exams/getByUserId/:id";
 export const EXAM_DETAIL_BY_ID_URL = "/exams/getDetailById/:id";
+export const EXAM_BY_ID_URL = "/exams/getById/:id";
+export const QUESTION_BY_EXAM_ID_URL = "/exams/:id/questions";
+export const JOIN_EXAM_URL = "/exams/join/:id";

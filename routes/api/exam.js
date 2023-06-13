@@ -9,4 +9,7 @@ router.get('/', examController.index);
 router.post('/create', validate(createExamValidation), authenticateRole(['admin', 'teacher']), examController.create);
 router.get('/getByUserId/:id', examController.getByUserId);
 router.get('/getDetailById/:id', examController.getDetailById);
+router.get('/getById/:id', examController.getById);
+router.get('/:id/questions', examController.getQuestionByExamId);
+router.get('/join/:id', examController.join);
 module.exports = router;
