@@ -3,7 +3,7 @@ class QuestionRepository {
   async index () {
     return await DB.executeQuery("SELECT * FROM questions");
   }
-
+  
   async create (examId, question) {
     const insertQuery = `
       INSERT INTO questions (exam_id, type, point, content)
@@ -46,6 +46,7 @@ class QuestionRepository {
         existingQuestion.answers.push({
           id: answer_id,
           content: answer_content,
+          isCorrect: false,
         });
       } else {
         // Create a new question object
@@ -58,6 +59,7 @@ class QuestionRepository {
             {
               id: answer_id,
               content: answer_content,
+              isCorrect: false,
             },
           ],
         };

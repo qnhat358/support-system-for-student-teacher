@@ -1,6 +1,9 @@
 const ExamRepository = require('../repositories/ExamRepository');
 const QuestionRepository = require('../repositories/QuestionRepository');
 const AnswerRepository = require('../repositories/AnswerRepository');
+const ResultRepository = require('../repositories/ResultRepository');
+const QuestionSubmissionRepository = require('../repositories/QuestionSubmisstionRepository');
+const AnswerSubmissionRepository = require('../repositories/AnswerSubmissionRepository');
 
 class ExamService {
   // [GET] /exams/
@@ -41,6 +44,46 @@ class ExamService {
       })
     })
     return exam;
+  }
+
+  // [POST] /exams/submit
+  async submit (userId, exam) {
+    let totalPoint = 0;
+    let totalQuestion = 0;
+    for (let i = 0; i < exam.questions.length; i++) {
+      const question = exam.questions[i];
+      const correctAnswers = await AnswerRepository.selectByQuestionId(question.id);
+      const userAnswers = question.answers;
+    
+      for (const userAnswer of userAnswers) {
+        const correctAnswer = correctAnswers.find(answer => answer.id === userAnswer.id);
+    
+        if (userAnswer.isCorrect !== correctAnswer.is_correct) {
+          question.correctAnswer = correctAnswers;
+          question.isFalse = true;
+          break;
+        }
+      }
+      if (!question.isFalse) {
+        totalPoint += question.point;
+        totalQuestion += 1;
+      }
+    }
+    const result = {
+      exam_id: exam.id,
+      total_point: totalPoint,
+      total_question: totalQuestion,
+      time_start: exam.timeStart,
+      time_end: exam.timeEnd,
+    }
+    const resultDb = await ResultRepository.create(userId, result);
+    exam.questions.forEach(async (question) => {
+      const questionDb = await QuestionSubmissionRepository.create(resultDb.id, question);
+      question.answers.forEach(async (answer) => {
+        await AnswerSubmissionRepository.create(questionDb.id, answer);
+      })
+    });
+    return resultDb;
   }
 }
 module.exports = new ExamService();

@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { useRoute } from "vue-router";
-
+import { toHHMMstring, toISOdate } from "../composables/dateTimeConvert";
 const route = useRoute();
 
 const { exam } = storeToRefs(useExamStore());
@@ -23,13 +23,13 @@ onMounted(async()=>{
           <span class="font-semibold">Exam name: </span> {{ exam.name }}
         </div>
         <div>
-          <span class="font-semibold">Exam date: </span> {{ exam.date }}
+          <span class="font-semibold">Exam date: </span> {{ toISOdate(exam.date) }}
         </div>
         <div>
-          <span class="font-semibold">Exam start: </span> {{ exam.start }}
+          <span class="font-semibold">Exam start: </span> {{ toHHMMstring(exam.start) }}
         </div>
         <div>
-          <span class="font-semibold">Exam end: </span> {{ exam.end }}
+          <span class="font-semibold">Exam end: </span> {{ toHHMMstring(exam.end) }}
         </div>
       </div>
       <div

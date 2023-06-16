@@ -72,6 +72,15 @@ class ExamController {
       res.responseError(error)
     }
   }
+  // [GET] /exams/submit
+  async submit (req, res, next) {
+    try {
+      const exam = await ExamService.submit(req.user.UserId, req.body);
+      res.responseSuccess(exam)
+    } catch (error) {
+      res.responseError(error)
+    }
+  }
 
 }
 module.exports = new ExamController();

@@ -4,9 +4,12 @@ import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import JoinTestModal from "../components/joinTest/JoinTestModal.vue";
 import { useRoute } from "vue-router";
-
+import { toHHMMstring } from "../composables/dateTimeConvert";
+import moment from 'moment';
 const route = useRoute();
-const { exam } = storeToRefs(useExamStore());
+const { exam, result } = storeToRefs(useExamStore());
+
+const { fetchQuestionByExamId } = useExamStore();
 
 const isShowModal = ref(false);
 const id = ref('');
@@ -45,61 +48,9 @@ const topicOption = [
     value: 'biology',
   },
 ]
-const testInfo = ref({
-  date: '2023-05-22',
-  topic: 'US',
-  id: '12412',
-  start: '14:00',
-  end: '14:30',
-})
-const questions = ref([
-  {
-    question: 'What is my name ?',
-    point: 1,
-    answers: [
-      {
-        answer: 'Nhat',
-        isCorrect: true,
-      },
-      {
-        answer: 'Trung',
-        isCorrect: false,
-      },
-      {
-        answer: 'Heo',
-        isCorrect: false,
-      },
-      {
-        answer: 'Cuong',
-        isCorrect: false,
-      },
-    ]
-  },
-  {
-    question: 'What is my name ?',
-    point: 2,
-    answers: [
-      {
-        answer: 'Nhat',
-        isCorrect: true,
-      },
-      {
-        answer: 'Trung',
-        isCorrect: false,
-      },
-      {
-        answer: 'Heo',
-        isCorrect: false,
-      },
-      {
-        answer: 'Cuong',
-        isCorrect: false,
-      },
-    ]
-  },
-])
 
-const openModal = () => {
+const openModal = async () => {
+  await fetchQuestionByExamId(id.value);
   document.body.style.overflow = 'hidden';
   isShowModal.value = true;
 }
@@ -107,8 +58,9 @@ const closeModal = () => {
   document.body.style.overflow = '';
   isShowModal.value = false;
 }
-onMounted(async()=>{
+onMounted(async () => {
   id.value = route.query.id;
+  result.value = {};
 })
 </script>
 
@@ -148,19 +100,56 @@ onMounted(async()=>{
       </div>
     </div>
     <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center">
-      <div class="w-10/12 flex flex-row justify-evenly items-center">
-        <!-- <div>
-          <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Total questions: {{ questions.length
-          }}
-          </h2>
-        </div> -->
-        <div>
+      <div class="flex flex-row justify-evenly items-center w-full">
+        <div v-if="!Object.keys(result).length">
           <button
             class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg"
             @click="openModal">
             Start
           </button>
         </div>
+        <div v-else class="relative overflow-x-auto w-full flex flex-col items-center">
+          <table class="w-full text-sm text-center font-bold text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  Total points
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  True questions
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Time start
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Time end
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th class="px-6 py-4">
+                  {{ result.total_point }}
+                </th>
+                <td class="px-6 py-4">
+                  {{result.total_question}}
+                </td>
+                <td class="px-6 py-4">
+                  {{moment(result.time_start).format('DD/MM/YYYY - HH:mm:ss')}}
+                </td>
+                <td class="px-6 py-4">
+                  {{moment(result.time_end).format('DD/MM/YYYY - HH:mm:ss')}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button
+            class="px-5 py-2 mt-10 mr-10 self-end bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg"
+            @click="goHome">
+            Go Home
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

@@ -8,6 +8,8 @@ const pool = new Pool({
   database: process.env.DB,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  max: 30, // Maximum number of connections in the pool
+  idleTimeoutMillis: 30000, // How long a connection can remain idle in the pool
 })
 
 const executeQuery = async (query, params = []) => {
@@ -18,7 +20,9 @@ const executeQuery = async (query, params = []) => {
   } catch (error) {
     throw new InternalServerException(httpErrorTransform.query_error, error.message);
   } finally {
-    client.release();
+    if (client) {
+      client.release(); // Release the connection back to the pool
+    }
   }
 };
 

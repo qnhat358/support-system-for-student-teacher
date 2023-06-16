@@ -11,3 +11,4 @@ export const EXAM_DETAIL_BY_ID_URL = "/exams/getDetailById/:id";
 export const EXAM_BY_ID_URL = "/exams/getById/:id";
 export const QUESTION_BY_EXAM_ID_URL = "/exams/:id/questions";
 export const JOIN_EXAM_URL = "/exams/join/:id";
+export const SUBMIT_EXAM_URL = "/exams/submit";

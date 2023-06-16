@@ -22,7 +22,7 @@ class AuthService {
   }
 
   async login (username, password) {
-    const user = await UserRepository.getUser(username, password);
+    const user = await UserRepository.getUser(username);
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new UnauthorizedException(httpErrorTransform.unauthorized, 'Incorrect username or password');

@@ -20,5 +20,18 @@ class AnswerRepository {
     const result = await DB.executeQuery(insertQuery, values);
     return result[0];
   }
+
+  async selectByQuestionId (questionId) {
+    const query = `
+      SELECT id, is_correct, content FROM answers WHERE question_id = $1
+    `;
+
+    const values = [
+      questionId,
+    ];
+
+    const result = await DB.executeQuery(query, values);
+    return result;
+  }
 }
 module.exports = new AnswerRepository();

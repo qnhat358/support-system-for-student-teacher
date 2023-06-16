@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import http from '../services/http'
 import { useLoaderStore } from "@/stores/loader";
 
-import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL, EXAM_BY_ID_URL, QUESTION_BY_EXAM_ID_URL, JOIN_EXAM_URL } from '../services/apiUrls'
+import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL, EXAM_BY_ID_URL, QUESTION_BY_EXAM_ID_URL, JOIN_EXAM_URL, SUBMIT_EXAM_URL } from '../services/apiUrls'
 export const useExamStore = defineStore('exam', {
   state: () => ({
     exam: {
@@ -32,10 +32,11 @@ export const useExamStore = defineStore('exam', {
       ]
     },
     exams: [],
+    result:{},
   }),
   getters: {
     getTotalPoints: (state) => {
-      return state.exam.questions.reduce((sum, question) => sum + +question.point, 0);
+      return state.exam.questions?.reduce((sum, question) => sum + +question.point, 0);
     },
   },
   actions: {
@@ -99,7 +100,7 @@ export const useExamStore = defineStore('exam', {
         const response = await http.get(
           `${QUESTION_BY_EXAM_ID_URL}`.replace(":id", id)
         );
-        this.exam.questions = response.data.data;
+        this.exam.questions= response.data.data;
       } catch (err) {
         console.log(err);
       }
@@ -114,6 +115,21 @@ export const useExamStore = defineStore('exam', {
           `${JOIN_EXAM_URL}`.replace(":id", id)
         );
         return response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+
+    async submit () {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        console.log(this.exam);
+        const response = await http.post(
+          `${SUBMIT_EXAM_URL}`, this.exam
+        );
+        this.result = response.data.data;
       } catch (err) {
         console.log(err);
       }

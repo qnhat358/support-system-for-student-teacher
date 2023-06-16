@@ -12,4 +12,5 @@ router.get('/getDetailById/:id', examController.getDetailById);
 router.get('/getById/:id', examController.getById);
 router.get('/:id/questions', examController.getQuestionByExamId);
 router.get('/join/:id', examController.join);
+router.post('/submit', examController.submit);
 module.exports = router;
