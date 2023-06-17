@@ -6,12 +6,13 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from "vue-router";
 
 const { fetchExamsByUserId, fetchExamDetailById } = useExamStore();
-const { exams } = storeToRefs(useExamStore());
+const { exams, exam } = storeToRefs(useExamStore());
 const { user } = storeToRefs(useAuthStore());
 
 const router = useRouter();
 
 const handleDetail = async (id) => {
+  exam.value = {};
   await fetchExamDetailById(id);
   router.push({ name: "detailTest" });
 }
@@ -80,7 +81,7 @@ onMounted(async () => {
                   {{ exam.topic }}
                 </td>
                 <td class="px-6 py-4">
-                  {{ exam.content }}
+                  {{ exam.name }}
                 </td>
                 <td class="px-6 py-4">
                   {{ exam.date }}

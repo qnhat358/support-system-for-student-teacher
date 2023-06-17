@@ -15,6 +15,11 @@ class ExamService {
     return await ExamRepository.getByUserId(userId);
   }
 
+  // [GET] /exams/public
+  async getPublic () {
+    return await ExamRepository.getPublic();
+  }
+
   // [GET] /exams/getDetailById
   async getDetailById (id) {
     return await ExamRepository.getDetailById(id);

@@ -5,7 +5,7 @@ class RefreshTokenRepository {
     return await DB.executeQuery(sql, [token, userId]);
   }
   async get (token) {
-    const sql = "Select * FROM refresh_tokens WHERE token = $1";
+    const sql = "Select * FROM refresh_tokens WHERE token = $1 AND is_deleted = false";
     return await DB.executeQuery(sql, [token]);
   }
   async delete (token) {

@@ -1,78 +1,95 @@
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  avatar_url TEXT,
-  fullname TEXT NOT NULL,
-  phone TEXT,
-  birthday DATE,
-  username TEXT NOT NULL,
-  password TEXT NOT NULL,
-  type TEXT NOT NULL,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    avatar_url text,
+    fullname text,
+    phone text,
+    birthday date,
+    username text NOT NULL,
+    password text NOT NULL,
+    type text NOT NULL,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone
 );
 
-CREATE TABLE exams (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users (id),
-  topic TEXT NOT NULL,
-  duration INTEGER NOT NULL,
-  isPublic BOOLEAN NOT NULL,
-  date DATE,
-  exam_start TIME,
-  exam_end TIME,
-  total_point INTEGER NOT NULL,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.exams (
+    id integer NOT NULL,
+    user_id integer,
+    topic text NOT NULL,
+    duration integer NOT NULL,
+    is_public boolean NOT NULL,
+    date date,
+    exam_start time without time zone,
+    exam_end time without time zone,
+    total_point integer NOT NULL,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone,
+    grade character varying(100) NOT NULL,
+    name character varying(255)
 );
 
-CREATE TABLE questions (
-  id SERIAL PRIMARY KEY,
-  exam_id INTEGER REFERENCES exams (id),
-  user_id INTEGER REFERENCES users (id),
-  type TEXT NOT NULL,
-  content TEXT NOT NULL,
-  point INTEGER NOT NULL,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.questions (
+    id integer NOT NULL,
+    exam_id integer,
+    user_id integer,
+    type text NOT NULL,
+    content text NOT NULL,
+    point integer NOT NULL,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone
 );
 
-CREATE TABLE answers (
-  id SERIAL PRIMARY KEY,
-  question_id INTEGER REFERENCES questions (id),
-  content TEXT,
-  isCorrect BOOLEAN,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.answers (
+    id integer NOT NULL,
+    question_id integer,
+    content text,
+    is_correct boolean,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone
 );
 
-CREATE TABLE results (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users (id),
-  exam_id INTEGER REFERENCES exams (id),
-  total_point INTEGER DEFAULT 0,
-  time_start TIMESTAMP NOT NULL,
-  time_end TIMESTAMP NOT NULL,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.results (
+    id integer NOT NULL,
+    user_id integer,
+    exam_id integer,
+    total_point integer DEFAULT 0,
+    time_start timestamp without time zone NOT NULL,
+    time_end timestamp without time zone NOT NULL,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone,
+    total_question integer
 );
 
-CREATE TABLE refresh_tokens (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users (id),
-  token TEXT NOT NULL,
-  expires_at TIMESTAMP,
-  is_deleted BOOLEAN DEFAULT 'f',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP
+CREATE TABLE public.question_submissions (
+    id integer NOT NULL,
+    result_id integer,
+    question_id integer,
+    is_false boolean
+);
+
+CREATE TABLE public.answer_submissions (
+    id integer NOT NULL,
+    question_id integer,
+    true_answer_id integer,
+    is_checked boolean
+);
+
+CREATE TABLE public.refresh_tokens (
+    id integer NOT NULL,
+    user_id integer,
+    token text NOT NULL,
+    expires_at timestamp without time zone,
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone
 );

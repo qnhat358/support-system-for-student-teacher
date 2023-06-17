@@ -30,7 +30,16 @@ class ExamController {
     } catch (error) {
       res.responseError(error)
     }
+  }
 
+  // [GET] /exams/public
+  async getPublic (req, res, next) {
+    try {
+      const exams = await ExamService.getPublic();
+      res.responseSuccess(exams)
+    } catch (error) {
+      res.responseError(error)
+    }
   }
   // [GET] /exams/getDetailById/:id
   async getDetailById (req, res, next) {

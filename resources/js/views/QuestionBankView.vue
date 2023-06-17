@@ -1,6 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from "pinia";
+import { useExamStore } from "@/stores/exam.js";
+import { useRouter } from "vue-router";
 import useDetectOutsideClick from "../composables/useDetectOutsideClick";
+
+const { getExamsByTopic, exam } = storeToRefs(useExamStore());
+const { fetchPublicExams, fetchExamById } = useExamStore();
+
+const router = useRouter();
 
 const isShowDropdown = ref(false);
 const dropdownRef = ref();
@@ -277,6 +285,7 @@ const allTests = ref([
     ]
   },
 ])
+
 const changeTopic = (topic) => {
   searchForm.value.topic = topic;
   isShowDropdown.value = false;
@@ -289,10 +298,23 @@ const toggleExpand = (index) => {
   }
 }
 
+const handleDetail = async (id) => {
+  exam.value = {};
+  await fetchExamById(id);
+  router.push({ name: 'joinTest', query: {id}});
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+} 
+
 useDetectOutsideClick(dropdownRef, () => {
   isShowDropdown.value = false;
 });
 
+onMounted(async () => {
+  await fetchPublicExams();
+})
 </script>
 
 <template>
@@ -315,7 +337,7 @@ useDetectOutsideClick(dropdownRef, () => {
             class="absolute top-full mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
               <li>
-                <button v-for="(topic,index) in topics" type="button"
+                <button v-for="(topic, index) in topics" type="button"
                   class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   @click="changeTopic(topic.name)">{{ topic.name }}</button>
               </li>
@@ -338,22 +360,22 @@ useDetectOutsideClick(dropdownRef, () => {
         </div>
       </div>
       <div class="mt-10 w-full flex items-center justify-center gap-10">
-        <div v-for="(topic, index) in topics" :key="index" class="text-center flex flex-col items-center">
+        <div v-for="(exam, index) in getExamsByTopic" :key="index" class="text-center flex flex-col items-center">
           <div
             class="bg-[var(--primary)] hover:brightness-90 rounded-full p-3 aspect-square w-[80px] flex items-center justify-center">
-            <img :src="`/assets/images/${topic.icon}`" class="w-[50px] cursor-pointer" alt="..." />
+            <img :src="`/assets/images/${capitalizeFirstLetter(exam.topic)}.png`" class="w-[50px] cursor-pointer" alt="..." />
           </div>
-          <span class="font-medium">{{ topic.name }}</span>
+          <span class="font-medium">{{ capitalizeFirstLetter(exam.topic) }}</span>
         </div>
       </div>
       <div class="flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg px-6 mt-10">
-        <div v-for="(test, index) in allTests" :key="index">
+        <div v-for="(topic, index) in getExamsByTopic" :key="index">
           <div>
             <h2>
               <button type="button"
                 class="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
                 @click="toggleExpand(index)">
-                <span class="text-lg text-black font-semibold">{{ test.topic }}</span>
+                <span class="text-lg text-black font-semibold">{{ capitalizeFirstLetter(topic.topic) }}</span>
                 <svg class="w-6 h-6 rotate shrink-0" :class="{ 'rotate-180': expandId == index }" fill="currentColor"
                   viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd"
@@ -364,10 +386,10 @@ useDetectOutsideClick(dropdownRef, () => {
             </h2>
             <div :class="{ hidden: expandId != index }">
               <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-                <div v-for="(test, index) in test.test" :key="index"
-                  class="flex flex-row justify-between hover:bg-gray-400 px-2">
-                  <span class="mb-2 text-gray-500 dark:text-gray-400">{{ test.content }}</span>
-                  <span class="mb-2 text-gray-500 dark:text-gray-400">{{ test.totalQuestion }}</span>
+                <div v-for="(test, index) in topic.exams" :key="index"
+                  class="flex flex-row justify-between hover:bg-gray-400 px-2" @click="handleDetail(test.id)">
+                  <span class="mb-2 text-gray-500 dark:text-gray-400">{{ test.name }}</span>
+                  <span class="mb-2 text-gray-500 dark:text-gray-400">Grade: {{ test.grade }}</span>
                 </div>
               </div>
             </div>

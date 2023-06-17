@@ -1,6 +1,7 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useExamStore } from "../stores/exam";
+import { useAuthStore } from "../stores/auth";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -8,6 +9,7 @@ const router = useRouter();
 
 const { exam } = storeToRefs(useExamStore());
 const { joinExam } = useExamStore();
+const { user } = storeToRefs(useAuthStore());
 
 const examCode = ref('');
 const videoCode = ref('');
@@ -67,6 +69,7 @@ onMounted(() => {
         </div>
       </div>
       <div
+        v-if="user.type=='teacher'"
         class="w-full p-4 bg-white border border-gray-200 rounded-lg hover:shadow-[var(--third)] hover:shadow-md dark:bg-gray-800 dark:border-gray-700 text-center flex flex-col items-center">
         <router-link :to="{ name: 'createExam' }">
           <img class="rounded-t-lg h-[246px]" src="@assets/images/create_question.svg" alt="" />

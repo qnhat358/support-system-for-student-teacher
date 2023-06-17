@@ -1,11 +1,11 @@
 const DB = require('../../config/database.js');
 class ExamRepository {
   async index () {
-    return await DB.executeQuery("SELECT * FROM exams");
+    return await DB.executeQuery("SELECT * FROM exams AND is_deleted = false");
   }
 
   async getById (id) {
-    const result = await DB.executeQuery("SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1", [id]);
+    const result = await DB.executeQuery("SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1 AND is_deleted = false", [id]);
     return result[0];
   }
 
@@ -33,9 +33,9 @@ class ExamRepository {
 
   async getByUserId (userId) {
     const query = `
-      SELECT id, user_id, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
+      SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
       FROM exams
-      WHERE user_id = $1
+      WHERE user_id = $1 AND is_deleted = false
     `;
     const values = [userId];
 
@@ -77,7 +77,7 @@ class ExamRepository {
   FROM exams
   JOIN questions ON exams.id = questions.exam_id
   JOIN answers ON questions.id = answers.question_id
-  WHERE exams.id = $1
+  WHERE exams.id = $1 AND exams.is_deleted = false AND questions.is_deleted = false AND answers.is_deleted = false
   ORDER BY questions.id, answers.id;
 `;
     const values = [id];
@@ -128,8 +128,31 @@ class ExamRepository {
   }
 
   async join (id) {
-    const result = await DB.executeQuery("SELECT COUNT(id) FROM exams WHERE id = $1 AND is_public = false", [id]);  //TODO check end before present
+    const result = await DB.executeQuery("SELECT COUNT(id) FROM exams WHERE id = $1 AND is_public = false AND is_deleted = false", [id]);  //TODO check end before present
     return result[0].count>0;
+  }
+
+  async getPublic () {
+    const query = `
+      SELECT id, user_id, name, grade, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
+      FROM exams
+      WHERE is_public = true AND is_deleted = false
+    `;
+
+    const result = await DB.executeQuery(query);
+    const exams = result.map(row => ({
+      id: row.id,
+      grade: row.grade,
+      name: row.name,
+      topic: row.topic,
+      duration: row.duration,
+      visibility: row.is_public ? 'public' : 'private',
+      date: row.date,
+      start: row.exam_start,
+      end: row.exam_end,
+      totalPoint: row.total_point,
+    }));
+    return exams;
   }
 }
 module.exports = new ExamRepository();

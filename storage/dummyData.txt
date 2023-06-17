@@ -1,0 +1,472 @@
+-- Inserting data into the 'exams' table
+INSERT INTO exams (id, user_id, topic, duration, is_public, date, exam_start, exam_end, total_point, grade, name)
+VALUES
+    -- Mathematics Exams
+    (1, 5, 'mathematics', 120, true, '2023-06-17', '09:00:00', '11:00:00', 100, '1', 'Math Exam 1'),
+    (2, 5, 'mathematics', 90, true, '2023-06-17', '14:00:00', '15:30:00', 100, '2', 'Math Exam 2'),
+
+    -- Literature Exams
+    (3, 5, 'literature', 60, true, '2023-06-18', '10:00:00', '11:00:00', 100, '1', 'Literature Exam 1'),
+    (4, 5, 'literature', 120, true, '2023-06-18', '15:00:00', '17:00:00', 100, '2', 'Literature Exam 2'),
+
+    -- History Exams
+    (5, 5, 'history', 90, true, '2023-06-19', '09:30:00', '11:00:00', 100, '1', 'History Exam 1'),
+    (6, 5, 'history', 120, true, '2023-06-19', '14:30:00', '16:30:00', 100, '2', 'History Exam 2'),
+
+    -- Physics Exams
+    (7, 5, 'physics', 120, true, '2023-06-20', '09:00:00', '11:00:00', 100, '1', 'Physics Exam 1'),
+    (8, 5, 'physics', 90, true, '2023-06-20', '14:00:00', '15:30:00', 100, '2', 'Physics Exam 2'),
+
+    -- Chemistry Exams
+    (9, 5, 'chemistry', 60, true, '2023-06-21', '10:00:00', '11:00:00', 100, '1', 'Chemistry Exam 1'),
+    (10, 5, 'chemistry', 120, true, '2023-06-21', '15:00:00', '17:00:00', 100, '2', 'Chemistry Exam 2'),
+
+    -- English Exams
+    (11, 5, 'english', 90, true, '2023-06-22', '09:30:00', '11:00:00', 100, '1', 'English Exam 1'),
+    (12, 5, 'english', 120, true, '2023-06-22', '14:30:00', '16:30:00', 100, '2', 'English Exam 2'),
+
+    -- Informatics Exams
+    (13, 5, 'informatics', 120, true, '2023-06-23', '09:00:00', '11:00:00', 100, '1', 'Informatics Exam 1'),
+    (14, 5, 'informatics', 90, true, '2023-06-23', '14:00:00', '15:30:00', 100, '2', 'Informatics Exam 2'),
+
+    -- Biology Exams
+    (15, 5, 'biology', 60, true, '2023-06-24', '10:00:00', '11:00:00', 100, '1', 'Biology Exam 1'),
+    (16, 5, 'biology', 120, true, '2023-06-24', '15:00:00', '17:00:00', 100, '2', 'Biology Exam 2');
+
+-- Inserting data into the 'questions' table
+INSERT INTO questions (id, exam_id, user_id, type, content, point)
+VALUES
+    -- Mathematics Exam 1 Questions
+    (1, 1, 5, 'multiple choice', 'What is the value of pi (π)?', 10),
+    (2, 1, 5, 'multiple choice', 'Solve the equation: 2x + 5 = 15', 10),
+    (3, 1, 5, 'multiple choice', 'Find the derivative of f(x) = 3x^2 + 2x + 1', 10),
+    (4, 1, 5, 'multiple choice', 'Simplify the expression: (2 + 3) * (4 - 1)', 10),
+
+    -- Mathematics Exam 2 Questions
+    (5, 2, 5, 'multiple choice', 'Solve the quadratic equation: x^2 - 4x + 4 = 0', 10),
+    (6, 2, 5, 'multiple choice', 'Find the value of x: 3x + 7 = 22', 10),
+    (7, 2, 5, 'multiple choice', 'Evaluate the integral: ∫(2x + 3) dx', 10),
+    (8, 2, 5, 'multiple choice', 'Simplify the expression: 5 * (2 - 3) + 4', 10),
+
+    -- Literature Exam 1 Questions
+    (9, 3, 5, 'multiple choice', 'Who is the author of "Pride and Prejudice"?', 10),
+    (10, 3, 5, 'multiple choice', 'In which century did William Shakespeare live?', 10),
+    (11, 3, 5, 'multiple choice', 'What is the setting of the novel "1984"?', 10),
+    (12, 3, 5, 'multiple choice', 'Who wrote the poem "The Raven"?', 10),
+
+    -- Literature Exam 2 Questions
+    (13, 4, 5, 'multiple choice', 'Who is the author of "To Kill a Mockingbird"?', 10),
+    (14, 4, 5, 'multiple choice', 'What is the main theme of the play "Romeo and Juliet"?', 10),
+    (15, 4, 5, 'multiple choice', 'Which historical event is depicted in the novel "War and Peace"?', 10),
+    (16, 4, 5, 'multiple choice', 'Who is the protagonist of the novel "Moby-Dick"?', 10),
+
+    -- History Exam 1 Questions
+    (17, 5, 5, 'multiple choice', 'Who was the first President of the United States?', 10),
+    (18, 5, 5, 'multiple choice', 'Which civilization built the Great Wall of China?', 10),
+    (19, 5, 5, 'multiple choice', 'What was the outcome of the Battle of Waterloo?', 10),
+    (20, 5, 5, 'multiple choice', 'Who is known as the "Father of the Indian Nation"?', 10),
+
+    -- History Exam 2 Questions
+    (21, 6, 5, 'multiple choice', 'Which country is credited with inventing paper?', 10),
+    (22, 6, 5, 'multiple choice', 'Who was the first female Prime Minister of the United Kingdom?', 10),
+    (23, 6, 5, 'multiple choice', 'What was the capital of the Byzantine Empire?', 10),
+    (24, 6, 5, 'multiple choice', 'Who was the leader of the Bolshevik Revolution in Russia?', 10),
+
+    -- Physics Exam 1 Questions
+    (25, 7, 5, 'multiple choice', 'What is the formula for calculating velocity?', 10),
+    (26, 7, 5, 'multiple choice', 'What is the SI unit of electric current?', 10),
+    (27, 7, 5, 'multiple choice', 'What is the law of conservation of energy?', 10),
+    (28, 7, 5, 'multiple choice', 'What is the principle behind an optical fiber?', 10),
+
+    -- Physics Exam 2 Questions
+    (29, 8, 5, 'multiple choice', 'What is the formula for calculating force?', 10),
+    (30, 8, 5, 'multiple choice', 'What is the SI unit of resistance?', 10),
+    (31, 8, 5, 'multiple choice', 'What is the law of gravitation?', 10),
+    (32, 8, 5, 'multiple choice', 'What is the principle behind a simple pendulum?', 10),
+
+    -- Chemistry Exam 1 Questions
+    (33, 9, 5, 'multiple choice', 'What is the atomic number of oxygen?', 10),
+    (34, 9, 5, 'multiple choice', 'What is the formula for water?', 10),
+    (35, 9, 5, 'multiple choice', 'What is the pH of a neutral solution?', 10),
+    (36, 9, 5, 'multiple choice', 'What is the chemical symbol for gold?', 10),
+
+    -- Chemistry Exam 2 Questions
+    (37, 10, 5, 'multiple choice', 'What is the atomic number of carbon?', 10),
+    (38, 10, 5, 'multiple choice', 'What is the formula for methane?', 10),
+    (39, 10, 5, 'multiple choice', 'What is the pH of a basic solution?', 10),
+    (40, 10, 5, 'multiple choice', 'What is the chemical symbol for silver?', 10),
+
+    -- English Exam 1 Questions
+    (41, 11, 5, 'multiple choice', 'What is a simile?', 10),
+    (42, 11, 5, 'multiple choice', 'Who wrote the play "Hamlet"?', 10),
+    (43, 11, 5, 'multiple choice', 'What is the meaning of the word "synonym"?', 10),
+    (44, 11, 5, 'multiple choice', 'What is the opposite of the word "courageous"?', 10),
+
+    -- English Exam 2 Questions
+    (45, 12, 5, 'multiple choice', 'What is a metaphor?', 10),
+    (46, 12, 5, 'multiple choice', 'Who wrote the novel "Pride and Prejudice"?', 10),
+    (47, 12, 5, 'multiple choice', 'What is the meaning of the word "antonym"?', 10),
+    (48, 12, 5, 'multiple choice', 'What is the opposite of the word "generous"?', 10),
+
+    -- Informatics Exam 1 Questions
+    (49, 13, 5, 'multiple choice', 'What is a variable?', 10),
+    (50, 13, 5, 'multiple choice', 'What is the purpose of a loop in programming?', 10),
+    (51, 13, 5, 'multiple choice', 'What is the meaning of the acronym "HTML"?', 10),
+    (52, 13, 5, 'multiple choice', 'What is the output of the following code: print("Hello, world!")?', 10),
+
+    -- Informatics Exam 2 Questions
+    (53, 14, 5, 'multiple choice', 'What is an array?', 10),
+    (54, 14, 5, 'multiple choice', 'What is the purpose of conditional statements in programming?', 10),
+    (55, 14, 5, 'multiple choice', 'What is the meaning of the acronym "CSS"?', 10),
+    (56, 14, 5, 'multiple choice', 'What is the output of the following code: x = 5; y = 3; z = x + y; print(z)?', 10),
+
+    -- Biology Exam 1 Questions
+    (57, 15, 5, 'multiple choice', 'What is the function of the mitochondria?', 10),
+    (58, 15, 5, 'multiple choice', 'What is the process of photosynthesis?', 10),
+    (59, 15, 5, 'multiple choice', 'What is the scientific name for humans?', 10),
+    (60, 15, 5, 'multiple choice', 'What is the structure of DNA?', 10),
+
+    -- Biology Exam 2 Questions
+    (61, 16, 5, 'multiple choice', 'What is the function of the chloroplast?', 10),
+    (62, 16, 5, 'multiple choice', 'What is the process of cellular respiration?', 10),
+    (63, 16, 5, 'multiple choice', 'What is the scientific name for dogs?', 10),
+    (64, 16, 5, 'multiple choice', 'What is the structure of a cell membrane?', 10);
+
+-- Inserting data into the 'answers' table
+INSERT INTO answers (id, question_id, content, is_correct)
+VALUES
+    -- Answers for Mathematics Exam 1 Questions
+    (1, 1, '3.14', false),
+    (2, 1, '3.1415', true),
+    (3, 1, '3.14159', false),
+    (4, 1, '3.141592', false),
+
+    (5, 2, 'x = 5', false),
+    (6, 2, 'x = 6', false),
+    (7, 2, 'x = 7', true),
+    (8, 2, 'x = 8', false),
+
+    (9, 3, 'f''(x) = 6x + 2', false),
+    (10, 3, 'f''(x) = 6x + 2x + 1', false),
+    (11, 3, 'f''(x) = 3x^2 + 2', true),
+    (12, 3, 'f''(x) = 3x^2 + 2x + 1', false),
+
+    (13, 4, '10', false),
+    (14, 4, '12', true),
+    (15, 4, '14', false),
+    (16, 4, '16', false),
+
+    -- Answers for Mathematics Exam 2 Questions
+    (17, 5, 'x = 1', true),
+    (18, 5, 'x = 2', false),
+    (19, 5, 'x = 3', false),
+    (20, 5, 'x = 4', false),
+
+    (21, 6, 'x = 3', false),
+    (22, 6, 'x = 5', true),
+    (23, 6, 'x = 7', false),
+    (24, 6, 'x = 9', false),
+
+    (25, 7, '∫(2x + 3) dx = x^2 + 3x', false),
+    (26, 7, '∫(2x + 3) dx = x^2 + 3x + C', true),
+    (27, 7, '∫(2x + 3) dx = 2x^2 + 3', false),
+    (28, 7, '∫(2x + 3) dx = 2x^2 + 3 + C', false),
+
+    (29, 8, '1', false),
+    (30, 8, '2', false),
+    (31, 8, '3', true),
+    (32, 8, '4', false),
+
+    -- Answers for Literature Exam 1 Questions
+    (33, 9, 'Jane Austen', true),
+    (34, 9, 'Emily Brontë', false),
+    (35, 9, 'George Orwell', false),
+    (36, 9, 'Edgar Allan Poe', false),
+
+    (37, 10, '17th century', false),
+    (38, 10, '18th century', true),
+    (39, 10, '19th century', false),
+    (40, 10, '20th century', false),
+
+    (41, 11, 'London', false),
+    (42, 11, 'New York City', false),
+    (43, 11, 'Paris', false),
+    (44, 11, 'Moscow', true),
+
+    (45, 12, 'Harper Lee', true),
+    (46, 12, 'F. Scott Fitzgerald', false),
+    (47, 12, 'Ernest Hemingway', false),
+    (48, 12, 'Mark Twain', false),
+
+    -- Answers for Literature Exam 2 Questions
+    (49, 13, 'William Shakespeare', false),
+    (50, 13, 'Charles Dickens', true),
+    (51, 13, 'J.R.R. Tolkien', false),
+    (52, 13, 'George Orwell', false),
+
+    (53, 14, 'Love and hate', false),
+    (54, 14, 'Life and death', false),
+    (55, 14, 'Hope and despair', false),
+    (56, 14, 'War and peace', true),
+
+    (57, 15, 'Novel', false),
+    (58, 15, 'Poem', false),
+    (59, 15, 'Play', false),
+    (60, 15, 'Short story', true),
+
+    (61, 16, 'Rain', true),
+    (62, 16, 'Snow', false),
+    (63, 16, 'Sun', false),
+    (64, 16, 'Clouds', false),
+
+    -- Answers for History Exam 1 Questions
+    (65, 17, 'China', true),
+    (66, 17, 'India', false),
+    (67, 17, 'Egypt', false),
+    (68, 17, 'Greece', false),
+
+    (69, 18, 'France', false),
+    (70, 18, 'Russia', false),
+    (71, 18, 'United States', true),
+    (72, 18, 'Germany', false),
+
+    (73, 19, '1776', false),
+    (74, 19, '1812', false),
+    (75, 19, '1914', false),
+    (76, 19, '1815', true),
+
+    (77, 20, 'Mahatma Gandhi', true),
+    (78, 20, 'Nelson Mandela', false),
+    (79, 20, 'Abraham Lincoln', false),
+    (80, 20, 'Winston Churchill', false),
+
+    -- Answers for History Exam 2 Questions
+    (81, 21, 'China', false),
+    (82, 21, 'India', true),
+    (83, 21, 'Egypt', false),
+    (84, 21, 'Greece', false),
+
+    (85, 22, 'Margaret Thatcher', false),
+    (86, 22, 'Angela Merkel', false),
+    (87, 22, 'Theresa May', false),
+    (88, 22, 'Margaret Thatcher', true),
+
+    (89, 23, 'Rome', false),
+    (90, 23, 'Athens', false),
+    (91, 23, 'Constantinople', true),
+    (92, 23, 'Cairo', false),
+
+    (93, 24, 'Vladimir Lenin', true),
+    (94, 24, 'Joseph Stalin', false),
+    (95, 24, 'Leon Trotsky', false),
+    (96, 24, 'Nikita Khrushchev', false),
+
+    -- Answers for Physics Exam 1 Questions
+    (97, 25, 'v = d / t', true),
+    (98, 25, 'a = (v_f - v_i) / t', false),
+    (99, 25, 'F = m * a', false),
+    (100, 25, 'P = F / A', false),
+
+    (101, 26, 'Ampere (A)', true),
+    (102, 26, 'Volt (V)', false),
+    (103, 26, 'Ohm (Ω)', false),
+    (104, 26, 'Watt (W)', false),
+
+    (105, 27, 'Energy cannot be created or destroyed, only transformed from one form to another.', true),
+    (106, 27, 'Energy cannot be created, only destroyed.', false),
+    (107, 27, 'Energy cannot be destroyed, only created.', false),
+    (108, 27, 'Energy can be created and destroyed.', false),
+
+    (109, 28, '2', false),
+    (110, 28, '4', false),
+    (111, 28, '6', true),
+    (112, 28, '8', false),
+
+    -- Answers for Physics Exam 2 Questions
+    (113, 29, 'Acceleration', false),
+    (114, 29, 'Velocity', false),
+    (115, 29, 'Force', true),
+    (116, 29, 'Mass', false),
+
+    (117, 30, 'Static friction', false),
+    (118, 30, 'Kinetic friction', true),
+    (119, 30, 'Rolling friction', false),
+    (120, 30, 'Fluid friction', false),
+
+    (121, 31, 'Newton', true),
+    (122, 31, 'Einstein', false),
+    (123, 31, 'Tesla', false),
+    (124, 31, 'Hawking', false),
+
+    (125, 32, 'Gravity', false),
+    (126, 32, 'Electromagnetic force', false),
+    (127, 32, 'Strong nuclear force', false),
+    (128, 32, 'Weak nuclear force', true),
+
+    -- Answers for Chemistry Exam 1 Questions
+    (129, 33, 'H2O', false),
+    (130, 33, 'CO2', false),
+    (131, 33, 'O2', true),
+    (132, 33, 'H2', false),
+
+    (133, 34, 'NaCl', true),
+    (134, 34, 'HCl', false),
+    (135, 34, 'H2SO4', false),
+    (136, 34, 'H2O', false),
+
+    (137, 35, 'Copper', false),
+    (138, 35, 'Iron', true),
+    (139, 35, 'Gold', false),
+    (140, 35, 'Silver', false),
+
+    (141, 36, 'H2SO4', false),
+    (142, 36, 'HNO3', false),
+    (143, 36, 'HCl', false),
+    (144, 36, 'H3PO4', true),
+
+    -- Answers for Chemistry Exam 2 Questions
+    (145, 37, 'Oxygen', false),
+    (146, 37, 'Carbon dioxide', true),
+    (147, 37, 'Hydrogen', false),
+    (148, 37, 'Nitrogen', false),
+
+    (149, 38, 'Fe', false),
+    (150, 38, 'Cu', true),
+    (151, 38, 'Ag', false),
+    (152, 38, 'Au', false),
+
+    (153, 39, 'H2O', true),
+    (154, 39, 'CO2', false),
+    (155, 39, 'CH4', false),
+    (156, 39, 'NH3', false),
+
+    (157, 40, 'NaCl', false),
+    (158, 40, 'KCl', false),
+    (159, 40, 'MgCl2', true),
+    (160, 40, 'CaCl2', false),
+
+    -- Answers for English Exam 1 Questions
+    (161, 41, 'A comparison between two unlike things using "like" or "as".', true),
+    (162, 41, 'Giving human characteristics to non-human objects.', false),
+    (163, 41, 'Repetition of consonant sounds at the beginning of words.', false),
+    (164, 41, 'Repetition of vowel sounds in neighboring words.', false),
+
+    (165, 42, 'A figure of speech that uses exaggeration for emphasis or effect.', true),
+    (166, 42, 'A figure of speech that gives human characteristics to non-human objects.', false),
+    (167, 42, 'A figure of speech that makes a comparison between two unlike things without using "like" or "as".', false),
+    (168, 42, 'A figure of speech that repeats the same consonant sound at the beginning of words.', false),
+
+    (169, 43, 'The use of words to imitate the sounds they describe.', false),
+    (170, 43, 'The repetition of vowel sounds in neighboring words.', false),
+    (171, 43, 'A figure of speech that repeats the same consonant sound at the beginning of words.', true),
+    (172, 43, 'A figure of speech that compares two unlike things using "like" or "as".', false),
+
+    (173, 44, 'A figure of speech that gives human characteristics to non-human objects.', false),
+    (174, 44, 'The repetition of vowel sounds in neighboring words.', false),
+    (175, 44, 'A comparison between two unlike things using "like" or "as".', false),
+    (176, 44, 'The use of words to imitate the sounds they describe.', true),
+
+    -- Answers for English Exam 2 Questions
+    (177, 45, 'A story in which animals or objects are given human qualities and teach a moral lesson.', true),
+    (178, 45, 'A play written for performance on stage.', false),
+    (179, 45, 'A narrative poem that tells a story and often includes a hero or heroine.', false),
+    (180, 45, 'A type of fiction that is based on real events and characters.', false),
+
+    (181, 46, 'A figure of speech that uses exaggeration for emphasis or effect.', false),
+    (182, 46, 'The repetition of consonant sounds at the beginning of words.', false),
+    (183, 46, 'A comparison between two unlike things using "like" or "as".', false),
+    (184, 46, 'A figure of speech that gives human characteristics to non-human objects.', true),
+
+    (185, 47, 'A figure of speech that compares two unlike things using "like" or "as".', false),
+    (186, 47, 'The repetition of vowel sounds in neighboring words.', true),
+    (187, 47, 'A figure of speech that repeats the same consonant sound at the beginning of words.', false),
+    (188, 47, 'A figure of speech that gives human characteristics to non-human objects.', false),
+
+    (189, 48, 'A comparison between two unlike things using "like" or "as".', false),
+    (190, 48, 'The repetition of consonant sounds at the beginning of words.', true),
+    (191, 48, 'A figure of speech that gives human characteristics to non-human objects.', false),
+    (192, 48, 'The use of words to imitate the sounds they describe.', false),
+
+    -- Answers for Informatics Exam 1 Questions
+    (193, 49, 'Central Processing Unit', true),
+    (194, 49, 'Random Access Memory', false),
+    (195, 49, 'Operating System', false),
+    (196, 49, 'Hard Disk Drive', false),
+
+    (197, 50, 'Binary', false),
+    (198, 50, 'Decimal', false),
+    (199, 50, 'Hexadecimal', true),
+    (200, 50, 'Octal', false),
+
+    (201, 51, 'LAN', false),
+    (202, 51, 'WAN', true),
+    (203, 51, 'MAN', false),
+    (204, 51, 'VPN', false),
+
+    (205, 52, 'Internet Protocol', false),
+    (206, 52, 'Transmission Control Protocol', false),
+    (207, 52, 'Internet Control Message Protocol', true),
+    (208, 52, 'User Datagram Protocol', false),
+
+    -- Answers for Informatics Exam 2 Questions
+    (209, 53, 'Binary', true),
+    (210, 53, 'Decimal', false),
+    (211, 53, 'Hexadecimal', false),
+    (212, 53, 'Octal', false),
+
+    (213, 54, 'ROM', false),
+    (214, 54, 'CPU', false),
+    (215, 54, 'RAM', true),
+    (216, 54, 'GPU', false),
+
+    (217, 55, 'Internet Service Provider', false),
+    (218, 55, 'Wide Area Network', false),
+    (219, 55, 'Local Area Network', true),
+    (220, 55, 'Virtual Private Network', false),
+
+    (221, 56, 'Internet Protocol', true),
+    (222, 56, 'Transmission Control Protocol', false),
+    (223, 56, 'Internet Control Message Protocol', false),
+    (224, 56, 'User Datagram Protocol', false),
+
+    -- Answers for Biology Exam 1 Questions
+    (225, 57, 'The process by which green plants use sunlight to synthesize foods with the help of chlorophyll.', true),
+    (226, 57, 'The process by which living organisms obtain energy from food.', false),
+    (227, 57, 'The process by which plants and animals exchange gases.', false),
+    (228, 57, 'The process by which plants and animals reproduce.', false),
+
+    (229, 58, 'The basic unit of structure and function in living organisms.', true),
+    (230, 58, 'A group of similar cells that work together to perform a specific function.', false),
+    (231, 58, 'A group of tissues that work together to perform a specific function.', false),
+    (232, 58, 'A group of organs that work together to perform a specific function.', false),
+
+    (233, 59, 'The process by which living organisms obtain energy from food.', false),
+    (234, 59, 'The process by which green plants use sunlight to synthesize foods with the help of chlorophyll.', false),
+    (235, 59, 'The process by which plants and animals exchange gases.', true),
+    (236, 59, 'The process by which plants and animals reproduce.', false),
+
+    (237, 60, 'A group of similar cells that work together to perform a specific function.', false),
+    (238, 60, 'The basic unit of structure and function in living organisms.', false),
+    (239, 60, 'A group of tissues that work together to perform a specific function.', true),
+    (240, 60, 'A group of organs that work together to perform a specific function.', false),
+
+    -- Answers for Biology Exam 2 Questions
+    (241, 61, 'The process by which green plants use sunlight to synthesize foods with the help of chlorophyll.', false),
+    (242, 61, 'The process by which living organisms obtain energy from food.', false),
+    (243, 61, 'The process by which plants and animals exchange gases.', false),
+    (244, 61, 'The process by which plants and animals reproduce.', true),
+
+    (245, 62, 'A group of similar cells that work together to perform a specific function.', true),
+    (246, 62, 'The basic unit of structure and function in living organisms.', false),
+    (247, 62, 'A group of tissues that work together to perform a specific function.', false),
+    (248, 62, 'A group of organs that work together to perform a specific function.', false),
+
+    (249, 63, 'The process by which living organisms obtain energy from food.', false),
+    (250, 63, 'The process by which green plants use sunlight to synthesize foods with the help of chlorophyll.', false),
+    (251, 63, 'The process by which plants and animals exchange gases.', true),
+    (252, 63, 'The process by which plants and animals reproduce.', false),
+
+    (253, 64, 'A group of similar cells that work together to perform a specific function.', false),
+    (254, 64, 'The basic unit of structure and function in living organisms.', false),
+    (255, 64, 'A group of tissues that work together to perform a specific function.', false),
+    (256, 64, 'A group of organs that work together to perform a specific function.', true);
