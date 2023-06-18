@@ -2,33 +2,33 @@ const ExamService = require('../services/ExamService');
 
 class ExamController {
   // [GET] /exams/
-  async index (req, res, next) {
+  async index(req, res, next) {
     try {
       const exams = await ExamService.index();
-      res.responseSuccess(exams)
+      res.responseSuccess(exams);
     } catch (error) {
-      res.responseError(error)
+      res.responseError(error);
     }
   }
 
   // [POST] /exams/create
-  async create (req, res, next) {
+  async create(req, res, next) {
     try {
       const exam = await ExamService.create(req.user.UserId, req.body);
-      res.responseSuccess(exam)
+      res.responseSuccess(exam);
     } catch (error) {
-      res.responseError(error)
+      res.responseError(error);
     }
   }
 
   // [GET] /exams/getByUserId/:id
-  async getByUserId (req, res, next) {
+  async getByUserId(req, res, next) {
     const userId = req.params.id;
     try {
       const exams = await ExamService.getByUserId(userId);
-      res.responseSuccess(exams)
+      res.responseSuccess(exams);
     } catch (error) {
-      res.responseError(error)
+      res.responseError(error);
     }
   }
 
@@ -42,13 +42,13 @@ class ExamController {
     }
   }
   // [GET] /exams/getDetailById/:id
-  async getDetailById (req, res, next) {
+  async getDetailById(req, res, next) {
     const id = req.params.id;
     try {
       const exams = await ExamService.getDetailById(id);
-      res.responseSuccess(exams)
+      res.responseSuccess(exams);
     } catch (error) {
-      res.responseError(error)
+      res.responseError(error);
     }
   }
   // [GET] /exams/getById/:id
@@ -91,5 +91,14 @@ class ExamController {
     }
   }
 
+  // [PUT] /exams/update
+  async update(req, res, next) {
+    try {
+      const exam = await ExamService.update(req.body);
+      res.responseSuccess(exam);
+    } catch (error) {
+      res.responseError(error);
+    }
+  }
 }
 module.exports = new ExamController();

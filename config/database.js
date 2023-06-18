@@ -1,6 +1,6 @@
-const Pool = require('pg').Pool
-const { httpErrorTransform } = require('../app/utils/httpCodes');
-const { InternalServerException } = require('../app/exceptions');
+const Pool = require("pg").Pool;
+const { httpErrorTransform } = require("../app/utils/httpCodes");
+const { InternalServerException } = require("../app/exceptions");
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -10,7 +10,7 @@ const pool = new Pool({
   port: process.env.DB_PORT,
   max: 30, // Maximum number of connections in the pool
   idleTimeoutMillis: 30000, // How long a connection can remain idle in the pool
-})
+});
 
 const executeQuery = async (query, params = []) => {
   const client = await pool.connect();
@@ -18,7 +18,10 @@ const executeQuery = async (query, params = []) => {
     const result = await client.query(query, params);
     return result.rows;
   } catch (error) {
-    throw new InternalServerException(httpErrorTransform.query_error, error.message);
+    throw new InternalServerException(
+      httpErrorTransform.query_error,
+      error.message
+    );
   } finally {
     if (client) {
       client.release(); // Release the connection back to the pool

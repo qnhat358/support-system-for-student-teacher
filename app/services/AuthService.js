@@ -1,15 +1,21 @@
-const UserRepository = require('../repositories/UserRepository');
-const TokenService = require('./TokenService');
-const RefreshTokenRepository = require('../repositories/RefreshTokenRepository');
-const { ForbiddenException, BadRequestException, UnauthorizedException } = require('../exceptions');
-const { httpErrorTransform } = require('../../app/utils/httpCodes');
-const bcrypt = require('bcrypt');
+const UserRepository = require("../repositories/UserRepository");
+const TokenService = require("./TokenService");
+const RefreshTokenRepository = require("../repositories/RefreshTokenRepository");
+const {
+  ForbiddenException,
+  BadRequestException,
+  UnauthorizedException,
+} = require("../exceptions");
+const { httpErrorTransform } = require("../../app/utils/httpCodes");
+const bcrypt = require("bcrypt");
 
 class AuthService {
-  async register (username, password, type) {
-    const isUsernameDuplicate = await UserRepository.isUsernameDuplicate(username);
+  async register(username, password, type) {
+    const isUsernameDuplicate = await UserRepository.isUsernameDuplicate(
+      username
+    );
     if (isUsernameDuplicate) {
-      throw new BadRequestException('Username already exists');
+      throw new BadRequestException("Username already exists");
     }
     const saltRounds = 10;
     const hashPassword = await bcrypt.hash(password, saltRounds);
@@ -17,24 +23,28 @@ class AuthService {
     const authTokens = await TokenService.generateAuthTokens(user);
     return {
       user,
-      authTokens
-    }
+      authTokens,
+    };
   }
 
-  async login (username, password) {
+  async login(username, password) {
     const user = await UserRepository.getUser(username);
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      throw new UnauthorizedException(httpErrorTransform.unauthorized, 'Incorrect username or password');
+      throw new UnauthorizedException(
+        httpErrorTransform.unauthorized,
+        "Incorrect username or password"
+      );
     }
     const authTokens = await TokenService.generateAuthTokens(user);
+
     return {
       user,
-      authTokens
-    }
+      authTokens,
+    };
   }
 
-  async requestRefreshToken (token) {
+  async requestRefreshToken(token) {
     const tokenDB = await RefreshTokenRepository.get(token);
     if (!tokenDB.length) {
       throw new ForbiddenException(httpErrorTransform.forbiden);
@@ -45,7 +55,7 @@ class AuthService {
     return authTokens;
   }
 
-  async logout (token) {
+  async logout(token) {
     await RefreshTokenRepository.delete(token);
   }
 }
