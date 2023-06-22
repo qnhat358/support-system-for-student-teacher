@@ -39,7 +39,7 @@ onMounted(() => {
     <div class="flex justify-between gap-5">
       <div class="w-full rounded-xl bg-white h-40 shadow-md flex items-center justify-center p-10">
         <div class="flex gap-2 w-full rounded-xl bg-[#F7F8F7] h-20 border border-black p-3">
-          <input type="text" name="" id="" placeholder="Enter a join code" class="flex-grow" v-model="examCode">
+          <input type="text" name="" id="" placeholder="Enter an exam code" class="flex-grow" v-model="examCode">
           <button class="bg-black text-white px-4 h-full w-[20%]" @click="handleJoinExam">
             JOIN
           </button>
@@ -47,7 +47,7 @@ onMounted(() => {
       </div>
       <div class="w-full rounded-xl bg-white h-40 shadow-md flex items-center justify-center p-10">
         <div class="flex gap-2 w-full rounded-xl bg-[#F7F8F7] h-20 border border-black p-3">
-          <input type="text" name="" id="" placeholder="Enter a join code" class="flex-grow" v-model="videoCode">
+          <input type="text" name="" id="" placeholder="Enter a room code" class="flex-grow" v-model="videoCode">
           <button class="bg-black text-white px-4 h-full w-[20%]" @click="handleJoinVideo">
             JOIN
           </button>

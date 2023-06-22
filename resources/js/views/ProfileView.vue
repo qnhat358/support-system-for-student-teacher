@@ -108,19 +108,19 @@ const handleUpdateInfo = () => {
                 <div class="form-update flex flex-col gap-2">
                   <div class="flex items-start justify-between">
                     <span class="font-bold">Full name</span>
-                    <input type="text" v-model="formData.fullname" />
+                    <input type="text" class="w-3/5 px-4 py-2 border border-gray-300 rounded-md focus:outline-none" v-model="formData.fullname" />
                   </div>
                   <div class="flex items-start justify-between">
                     <span class="font-bold">Phone number</span>
                     <input
                       type="number"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                      class="w-3/5 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
                       v-model="formData.phone"
                     />
                   </div>
                   <div class="flex items-start justify-between">
                     <span class="font-bold">Birthday</span>
-                    <input type="date" v-model="formData.birthday" />
+                    <input type="date" class="w-3/5 px-4 py-2 border border-gray-300 rounded-md focus:outline-none" v-model="formData.birthday" />
                   </div>
                 </div>
                 <div class="flex justify-end mt-10 border-t">
