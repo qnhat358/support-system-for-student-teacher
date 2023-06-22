@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount, watch } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Dropdown from "./common/Dropdown.vue";
 import { storeToRefs } from "pinia";
@@ -26,6 +26,10 @@ const handleScroll = () => {
     if (!atTopOfPage.value) atTopOfPage.value = true;
   }
 };
+
+const currentRouteName = computed(() => {
+  return route.name;
+})
 
 const searchHandle = () => {
   router.push({ name: "result", query: { q: searchValue.value } });
@@ -131,15 +135,15 @@ onBeforeMount(async () => {
             <ul
               class="navbar bg-white lg:bg-transparent w-full hidden text-center lg:text-left lg:flex lg:flex-row text-gray-900 text-sm items-center font-bold">
               <li class="relative hover:text-black">
-                <router-link :to="{ name: 'home' }" class="active block py-3 lg:py-7 px-6 border-b-2 border-transparent"
-                  href="#home">Home</router-link>
+                <router-link :to="{ name: 'home' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'home'}"
+                  >Home</router-link>
               </li>
               <li class="relative hover:text-black">
-                <router-link :to="{ name: 'profile' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent"
-                  href="#services">Profile</router-link>
+                <router-link :to="{ name: 'profile' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'profile'}"
+                  >Profile</router-link>
               </li>
               <li class="relative hover:text-black">
-                <a class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" href="#portfolio">Statistical</a>
+                <a class="block py-3 lg:py-7 px-6 border-b-2 border-transparent">Statistical</a>
               </li>
             </ul>
           </div>
