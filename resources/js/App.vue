@@ -36,6 +36,7 @@ watch(
 <template>
   <!-- Layout component -->
   <PreLoader></PreLoader>
+  <notifications />
   <div class="w-full mx-auto flex justify-center items-center">
     <component :is="currentLayout" v-if="isRouterLoaded">
       <RouterView />

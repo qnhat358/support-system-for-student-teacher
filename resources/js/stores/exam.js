@@ -7,10 +7,10 @@ export const useExamStore = defineStore('exam', {
   state: () => ({
     exam: {
       id: '',
-      grade: 1,
+      grade: '',
       name: '',
       topic: '',
-      duration: '5',
+      duration: '',
       visibility: 'public',
       date: '',
       start: '',

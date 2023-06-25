@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container xl:max-w-6xl mx-auto px-4 py-6 mt-20">
+  <div class="container xl:max-w-6xl mx-auto px-4 py-6">
     <div class="mx-auto">
       <div class="flex flex-col min-w-0 break-words bg-white w-full mb-6 p-4 shadow-xl rounded-lg">
         <div class="relative overflow-x-auto sm:rounded-lg">
@@ -72,6 +72,9 @@ onMounted(async () => {
               </tr>
             </thead>
             <tbody>
+              <tr v-if="!exams.length">
+                <td colspan="6" class="pt-2 text-center font-bold text-lg">No exam has been created</td>
+              </tr>
               <tr v-for="(exam, index) in exams" :key="index"
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

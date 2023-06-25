@@ -3,38 +3,31 @@ import jwtDecode from "jwt-decode";
 import { API_BASE_URL } from "@/utils/constants";
 import router from '@/router'
 import { useAuthStore } from "@/stores/auth.js";
+import { notify } from "@kyvg/vue3-notification";
+
 
 const handleOkResponse = (response, resolve) => {
-  // const { setLoadingBar } = useLoaderStore();
-  // setLoadingBar(false);
   resolve(response);
 };
 
 const handleErrorResponse = (error, reject) => {
-  // const { setLoadingBar, setLoadingCircleModal } = useLoaderStore();
-  // const { setToastMessage } = useToastStore();
-  // setLoadingBar(false);
-  // setLoadingCircleModal(false);
-  // // const overlayElement = document.getElementsByClassName('v-overlay')[0];
-  // // if (overlayElement) overlayElement.style.display = 'none';
-  // if (!error.response) {
-  //   reject(error);
-  //   return;
-  // }
-  // const reponseErrors = error.response.data?.errors;
-  // let errors = [];
-  // if (!reponseErrors || reponseErrors.length === 0) {
-  //   errors = [error.response.data.message];
-  // } else {
-  //   errors = Object.keys(reponseErrors).reduce((currentErrors, key) => currentErrors.concat(reponseErrors[key]), errors);
-  // }
-  // setToastMessage({
-  //   icon: "mdi-block-helper",
-  //   show: true,
-  //   timeout: 3000,
-  //   color: 'red-darken-2',
-  //   messages: errors
-  // });
+  if (!error.response) {
+    reject(error);
+    return;
+  }
+  const responseErrors = error.response.data?.errors;
+  let errors = [];
+  if (!responseErrors || responseErrors.length === 0) {
+    errors = [error.response.data.message];
+  } if (responseErrors.constructor  === Array){
+    errors = Object.keys(responseErrors).reduce((currentErrors, key) => currentErrors.concat(responseErrors[key]), errors);
+  } else errors = [error.response.data.errors]
+  errors.forEach(error => {
+    notify({
+      text: error,
+      type: 'error',
+    });
+  })
   reject(error);
 };
 

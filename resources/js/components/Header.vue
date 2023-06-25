@@ -37,7 +37,7 @@ const searchHandle = () => {
 
 const handleLogout = async () => {
   await logout();
-  location.reload();
+  router.push({name: 'loginRegister'})
 }
 
 onBeforeMount(async () => {
@@ -103,7 +103,7 @@ onBeforeMount(async () => {
       </div>
 
       <div v-else class="container xl:max-w-6xl mx-auto px-4">
-        <div class="lg:flex lg:justify-between">
+        <div class="flex justify-between">
           <div class="flex justify-between">
             <router-link :to="{ name: 'home' }"
               class="mx-w-10 text-4xl font-bold capitalize text-gray-900 flex items-center">EasyQuiz</router-link>
@@ -144,6 +144,10 @@ onBeforeMount(async () => {
               </li>
               <li class="relative hover:text-black">
                 <a class="block py-3 lg:py-7 px-6 border-b-2 border-transparent">Statistical</a>
+              </li>
+              <li class="relative hover:text-black">
+                <router-link :to="{ name: 'chat' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'chat'}"
+                  >Message</router-link>
               </li>
             </ul>
           </div>

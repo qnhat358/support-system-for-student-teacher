@@ -4,7 +4,8 @@ import { useExamStore } from "../stores/exam";
 import { useAuthStore } from "../stores/auth";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify }  = useNotification()
 const router = useRouter();
 
 const { exam } = storeToRefs(useExamStore());
@@ -18,14 +19,16 @@ const handleJoinExam = async () => {
   const isJoin = await joinExam(examCode.value);
   if (isJoin) {
     router.push({ name: "waitingRoom", query: { id: examCode.value } });
+  } else {
+    notify({
+      type: 'error',
+      text: "Wrong exam id!",
+    });
   }
 }
 
 const handleJoinVideo = async () => {
-  // const isJoin = await joinExam(examCode.value);
-  // if (isJoin) {
-  //   router.push({ name: "waitingRoom", query: { id: examCode.value } });
-  // }
+  router.push({ name: "videoCall", query: { id: videoCode.value } });
 }
 
 onMounted(() => {

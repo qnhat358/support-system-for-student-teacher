@@ -38,6 +38,26 @@ export default [
     component: () => import("../views/ProfileView.vue"),
   },
   {
+    path: "/chat",
+    name: "chat",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/ChatView.vue"),
+  },
+  {
+    path: "/video-call",
+    name: "videoCall",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/VideoCallView.vue"),
+  },
+  {
     path: "/create-exam",
     name: "createExam",
     meta: {
@@ -76,6 +96,16 @@ export default [
       requiresAuth: true,
     },
     component: () => import("../views/DetailTestView.vue"),
+  },
+  {
+    path: "/export-test",
+    name: "exportTest",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/ExportTestView.vue"),
   },
   {
     path: "/edit-test",

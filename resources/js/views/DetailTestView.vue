@@ -2,12 +2,12 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
-import { useRouter } from "vue-router";
+import { exportHtmlAsPdf } from "../plugins/pdf";
 
 const { exam, getTotalPoints } = storeToRefs(useExamStore());
 
-const router = useRouter();
 const isShowCorrectAnswer = ref(false);
+const isExport = ref(false);
 
 const topicOption = [
   {
@@ -43,6 +43,11 @@ const topicOption = [
     value: 'biology',
   },
 ]
+
+function exportAsPdf() {
+  let element = document.getElementById('pdf-content-container');
+  exportHtmlAsPdf(element, 'test.pdf', 0);
+}
 </script>
 
 <template>
@@ -126,7 +131,7 @@ const topicOption = [
         </div>
       </div>
     </div>
-    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center">
+    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center" id="pdf-content-container">
       <div class="w-10/12 flex flex-col items-center">
         <div class="w-full flex flex-row justify-between items-center">
           <div class="flex flex-row gap-20">
@@ -137,7 +142,7 @@ const topicOption = [
             </h2>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer">
+            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer" v-show="!isExport">
             <div
               class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
             </div>
@@ -190,8 +195,8 @@ const topicOption = [
     <div class="flex justify-end gap-5 mt-4 pr-10">
       <button
         class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Edit</button>
-      <button
-        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg">Export</button>
+      <router-link :to="{ name: 'exportTest', query: { id } }"
+        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center" >Export</router-link>
     </div>
   </div>
 </template>

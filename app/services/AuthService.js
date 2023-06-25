@@ -1,6 +1,7 @@
 const UserRepository = require("../repositories/UserRepository");
 const TokenService = require("./TokenService");
 const RefreshTokenRepository = require("../repositories/RefreshTokenRepository");
+const index = require("../../config/algolia");
 const {
   ForbiddenException,
   BadRequestException,
@@ -10,7 +11,7 @@ const { httpErrorTransform } = require("../../app/utils/httpCodes");
 const bcrypt = require("bcrypt");
 
 class AuthService {
-  async register(username, password, type) {
+  async register (username, password, type) {
     const isUsernameDuplicate = await UserRepository.isUsernameDuplicate(
       username
     );
@@ -21,13 +22,22 @@ class AuthService {
     const hashPassword = await bcrypt.hash(password, saltRounds);
     const user = await UserRepository.addUser(username, hashPassword, type);
     const authTokens = await TokenService.generateAuthTokens(user);
+    index.saveObjects(user)
+      .then(({ objectIDs }) => {
+        console.log('Records saved to Algolia:', objectIDs);
+        // Handle the success response as needed
+      })
+      .catch((error) => {
+        console.error('Error saving records to Algolia:', error);
+        // Handle the error as needed
+      });
     return {
       user,
       authTokens,
     };
   }
 
-  async login(username, password) {
+  async login (username, password) {
     const user = await UserRepository.getUser(username);
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
@@ -44,7 +54,7 @@ class AuthService {
     };
   }
 
-  async requestRefreshToken(token) {
+  async requestRefreshToken (token) {
     const tokenDB = await RefreshTokenRepository.get(token);
     if (!tokenDB.length) {
       throw new ForbiddenException(httpErrorTransform.forbiden);
@@ -55,7 +65,7 @@ class AuthService {
     return authTokens;
   }
 
-  async logout(token) {
+  async logout (token) {
     await RefreshTokenRepository.delete(token);
   }
 }

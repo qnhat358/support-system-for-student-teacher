@@ -33,7 +33,6 @@ class AuthController {
         username,
         reqPassword
       );
-      console.log("aaa");
 
       const { password, ...others } = user;
       res.cookie("refreshToken", authTokens.refreshToken, {

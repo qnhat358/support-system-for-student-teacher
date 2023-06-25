@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persist'
+import Notifications from '@kyvg/vue3-notification'
 import { loadFonts } from './plugins/webfontloader'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -24,6 +25,7 @@ const app = createApp(App);
 
 app.use(pinia);
 app.use(router);
+app.use(Notifications)
 app.component("font-awesome-icon", FontAwesomeIcon);
 
 router.isReady().then(() => {
