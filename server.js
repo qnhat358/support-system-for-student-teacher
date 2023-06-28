@@ -95,7 +95,6 @@ io.on('connection', (socket) => {
           userSet.delete(item);
         }
       })
-      console.log(videoCallRooms);
       socket.to(roomId).emit('userLeft', user);
       socket.leave(roomId);
     }
@@ -105,7 +104,6 @@ io.on('connection', (socket) => {
   // Join a video call room
   socket.on('joinVideoCallRoom', (data) => {
     console.log('join');
-    console.log(data);
     const { userId, roomId } = data;
     socket.join(roomId);
     socket.userId = userId;
@@ -126,15 +124,31 @@ io.on('connection', (socket) => {
   });
 
   // Handle call signals
-  socket.on('callSignal', ({ userId, roomId, signal }) => {
+  socket.on('call', ( data ) => {
     // Relay the call signal to the recipient user in the same room
-    socket.to(roomId).emit('callSignal', { userId, signal });
+    console.log(data);
+    socket.broadcast.emit('call', data);
+  });
+  // Handle call signals
+  socket.on('answer', (signal) => {
+    // Relay the call signal to the recipient user in the same room
+    socket.broadcast.emit('answer',  signal);
+  });
+  socket.on('requestRemoteStreams', () => {
+    console.log(11);
+    // Relay the call signal to the recipient user in the same room
+    socket.broadcast.emit('requestRemoteStreams');
+  });
+  socket.on('remoteStream', ({stream}) => {
+    console.log(33);
+    console.log(stream);
+    // Relay the call signal to the recipient user in the same room
+    socket.broadcast.emit('remoteStream', stream);
   });
 
   // Leave a video call room
   socket.on('leaveVideoCallRoom', () => {
     const { userId, roomId } = socket;
-    console.log(userId);
     if (roomId && videoCallRooms.has(roomId)) {
       videoCallRooms.get(roomId).delete(userId);
       socket.to(roomId).emit('userLeft', userId);
@@ -142,6 +156,15 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('join', (roomId) => {
+    socket.join(roomId);
+    socket.to(roomId).broadcast.emit('user-connected', socket.id);
+    
+    socket.on('disconnect', () => {
+      socket.to(roomId).broadcast.emit('user-disconnected', socket.id);
+    });
+  });
+  
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.userId);

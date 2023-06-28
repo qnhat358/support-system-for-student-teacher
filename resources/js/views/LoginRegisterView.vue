@@ -85,7 +85,7 @@ const handleRegister = async () => {
           </div>
           <div class="content">
             <div class="checkbox">
-              <input type="checkbox" name="checkbox" id="checkbox">
+              <input type="checkbox" name="checkbox" id="checkbox" checked>
               <label>Remember me</label>
             </div>
           </div>

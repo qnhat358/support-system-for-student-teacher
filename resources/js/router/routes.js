@@ -53,7 +53,7 @@ export default [
     meta: {
       layout: "DefaultLayout",
       title: "EasyQuiz | Easy Learning",
-      requiresAuth: true,
+      requiresAuth: false,
     },
     component: () => import("../views/VideoCallView.vue"),
   },

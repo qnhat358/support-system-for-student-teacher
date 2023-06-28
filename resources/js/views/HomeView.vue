@@ -57,7 +57,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-3 justify-center w-full gap-4 mt-10">
+    <div class="grid grid-cols-1 justify-center w-full gap-4 mt-10" :class="[user.type=='teacher' ? 'lg:grid-cols-3' : 'lg:grid-cols-2']">
       <div
         class="w-full p-4 bg-white border border-gray-200 rounded-lg hover:shadow-[var(--third)] hover:shadow-md dark:bg-gray-800 dark:border-gray-700 text-center flex flex-col items-center">
         <router-link :to="{ name: 'listOfTest' }">

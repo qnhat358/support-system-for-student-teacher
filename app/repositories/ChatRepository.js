@@ -44,6 +44,7 @@ class ChatRepository {
     `;
     const values = [userId]
     const result = await DB.executeQuery(query, values);
+    console.log(result);
     return result.map(user => {
       return {
         user_id: user.id,
