@@ -1,9 +1,12 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { exportHtmlAsPdf } from "../plugins/pdf";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const { fetchExamDetailById } = useExamStore();
 const { exam, getTotalPoints } = storeToRefs(useExamStore());
 
 const isShowCorrectAnswer = ref(false);
@@ -48,6 +51,10 @@ function exportAsPdf() {
   let element = document.getElementById('pdf-content-container');
   exportHtmlAsPdf(element, 'test.pdf', 0);
 }
+onMounted(async()=>{
+  let id = route.query.id;
+  await fetchExamDetailById(id);
+})
 </script>
 
 <template>
@@ -193,9 +200,9 @@ function exportAsPdf() {
       </div>
     </div>
     <div class="flex justify-end gap-5 mt-4 pr-10">
-      <button
-        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Edit</button>
-      <router-link :to="{ name: 'exportTest', query: { id } }"
+      <router-link :to="{ name: 'editTest', query: { id: exam.id} }"
+        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg flex items-center" >Edit</router-link>
+      <router-link :to="{ name: 'exportTest', query: { id: exam.id} }"
         class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center" >Export</router-link>
     </div>
   </div>

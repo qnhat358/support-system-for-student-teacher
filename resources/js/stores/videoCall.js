@@ -5,6 +5,7 @@ export const useVideoCallStore = defineStore('videoCall', {
     isShowVideoCall: false,
     videoCallRoomId: '',
     callerName: '',
+    avatar: '',
   }),
   getters: {
   },

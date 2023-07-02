@@ -28,5 +28,22 @@ export const useUserStore = defineStore('user', {
       }
       finally { setLoadingModal(false); }
     },
+
+    async updateUserById (params) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+
+      const { user, isAuthenticated } = storeToRefs(useAuthStore())
+      try {
+        const response = await http.put(
+          `${USER_BY_ID_URL}`.replace(":id", user.value.id), params
+        );
+        user.value = response.data.data;
+        isAuthenticated.value = true;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
   },
 })

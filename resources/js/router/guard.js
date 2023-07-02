@@ -7,9 +7,8 @@ export function registerGuard (router) {
     if (to.name !== 'loginRegister' && to.name !== 'landing') {
       const { isAuthenticated } = storeToRefs(useAuthStore());
       if (!isAuthenticated.value) {
-        // const accessToken = localStorage.getItem('accessToken');
-        // const id = jwtDecode(accessToken)?.UserId;
-        // TODO: check token in localStorage
+        const accessToken = localStorage.getItem('accessToken');
+        const id = jwtDecode(accessToken)?.UserId;
         next({ name: 'loginRegister' });
       } else {
         next();

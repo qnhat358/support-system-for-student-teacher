@@ -57,11 +57,6 @@ watch(searchQuery, async () => {
   }
 });
 
-// const isScrolledToBottom = computed(()=>{
-//   let element = document.getElementById("message-container");
-//   return element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
-// })
-
 function scrollBottom () {
   messageContainer.value = document.getElementById("message-container")
 
@@ -87,8 +82,6 @@ const joinChatRoom = async (receiver) => {
   roomId.value = response.roomId;
   messages.value = response.messages.reverse();
   updateScroll();
-  // setTimeout(updateScroll, 500);
-  // scrollBottom();
 
   // Establish Socket.IO connection
   socket = io('http://127.0.0.1:3000');
@@ -156,8 +149,10 @@ onUnmounted(() => {
             class="px-3 flex items-center bg-grey-light cursor-pointer hover:backdrop-brightness-90"
             @click="joinChatRoom(user)">
             <div>
-              <img class="h-12 w-12 rounded-full"
-                src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg" />
+                <img v-if="user.avatar_url" :src="user.avatar_url"
+                  class="h-12 w-12 rounded-full" />
+                <img v-else src="@assets/images/avatar.jpg"
+                  class="h-12 w-12 rounded-full" />
             </div>
             <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
               <div class="flex items-bottom justify-between">
@@ -179,8 +174,10 @@ onUnmounted(() => {
         <div class="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center">
           <div class="flex items-center">
             <div>
-              <img class="w-10 h-10 rounded-full"
-                src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg" />
+              <img v-if="chatUser.avatar_url" :src="chatUser.avatar_url"
+                  class="h-10 w-10 rounded-full" />
+                <img v-else src="@assets/images/avatar.jpg"
+                  class="h-10 w-10 rounded-full" />
             </div>
             <div class="ml-4">
               <p class="text-grey-darkest">

@@ -32,7 +32,7 @@ import { useVideoCallStore } from "../stores/videoCall";
 import { useAuthStore } from "../stores/auth";
 import { storeToRefs } from "pinia";
 
-const { videoCallRoomId, callerName } = storeToRefs(useVideoCallStore());
+const { videoCallRoomId, callerName, avatar } = storeToRefs(useVideoCallStore());
 const { user } = storeToRefs(useAuthStore());
 
 const socket = ref(null);
@@ -69,7 +69,8 @@ const startCall = async () => {
       socket.value.emit('call', {
         signal, 
         callerId: user.value.id,
-        callerName: user.value.fullname
+        callerName: user.value.fullname,
+        avatar: user.value.avatar_url
       });
     });
 
@@ -118,6 +119,7 @@ onMounted(async () => {
   socket.value = io('http://127.0.0.1:3000');
   socket.value.on('call', async (data) => {
     callerName.value = data.callerName;
+    avatar.value = data.avatar
     try {
       if (!localStream.value) {
         await navigator.mediaDevices.getUserMedia({

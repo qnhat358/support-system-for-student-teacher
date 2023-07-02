@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { useRouter } from "vue-router";
+import {isImageURL} from '@/composables/checkImageUrl.js'
 import { useNotification } from "@kyvg/vue3-notification";
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
@@ -223,7 +224,10 @@ const handleSubmit = async () => {
                     stroke="red" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                  {{ answer.content }}
+                  <img v-if="isImageURL(answer.content)" :src="answer.content" class="max-w-[300px]">
+                  <span v-else>
+                    {{ answer.content }}
+                  </span>
                 </div>
               </div>
             </div>

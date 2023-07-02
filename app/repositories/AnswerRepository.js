@@ -4,6 +4,24 @@ class AnswerRepository {
     return await DB.executeQuery("SELECT * FROM answers");
   }
 
+  async update(answer) {
+    const updateQuery = `
+      UPDATE answers
+      SET content = $1, is_correct = $2
+      WHERE id = $3
+      RETURNING *
+    `;
+  
+    const updateValues = [
+      answer.content,
+      answer.isCorrect,
+      answer.id,
+    ];
+  
+    const result = await DB.executeQuery(updateQuery, updateValues);
+    return result[0];
+  }
+
   async create (questionId, answer) {
     const insertQuery = `
       INSERT INTO answers (question_id, content, is_correct)

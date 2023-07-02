@@ -9,9 +9,14 @@ class ResultService {
   // [GET] /results/getByUserId
   async getByUserId (userId) {
     return await ResultRepository.getByUserId(userId);
+  
+  }
+  // [GET] /results/getByExamId/:id
+  async getByExamId (userId) {
+    return await ResultRepository.getByExamId(userId);
   }
 
-  // [GET] /results/getDetailById
+  // [GET] /results/getDetailById/:id
   async getDetailById (id) {
     return await ResultRepository.getById(id);
   }

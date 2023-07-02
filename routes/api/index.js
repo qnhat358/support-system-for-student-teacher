@@ -4,11 +4,13 @@ const questionRouter = require('./question');
 const userRouter = require('./user');
 const authRouter = require('./auth');
 const chatRouter = require('./chat');
+const resultRouter = require('./result');
 const verifyToken = require('../../app/middlewares/verifyToken')
 
 const apiRouter = express.Router();
 
 
+apiRouter.use('/results', verifyToken, resultRouter);
 apiRouter.use('/chats', verifyToken, chatRouter);
 apiRouter.use('/exams', verifyToken, examRouter);
 apiRouter.use('/questions', verifyToken, questionRouter);

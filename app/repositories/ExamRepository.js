@@ -38,7 +38,7 @@ class ExamRepository {
     const query = `
       SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
       FROM exams
-      WHERE user_id = $1 AND is_deleted = false
+      WHERE user_id = $1 AND is_deleted = false ORDER BY id ASC
     `;
     const values = [userId];
 
@@ -161,7 +161,7 @@ class ExamRepository {
     return exams;
   }
   // Update Exam
-  async update(request) {
+  async update(id, request) {
     const query = `
       UPDATE exams
       SET 
@@ -187,7 +187,7 @@ class ExamRepository {
       request.start !== "" ? request.start : null,
       request.end !== "" ? request.end : null,
       request.totalPoint,
-      request.id,
+      id,
     ];
     const result = await DB.executeQuery(query, values);
     return result[0];

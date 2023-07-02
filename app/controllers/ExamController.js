@@ -91,10 +91,11 @@ class ExamController {
     }
   }
 
-  // [PUT] /exams/update
+  // [PUT] /exams/update/:id
   async update(req, res, next) {
+    const id = req.params.id;
     try {
-      const exam = await ExamService.update(req.body);
+      const exam = await ExamService.update(id, req.body);
       res.responseSuccess(exam);
     } catch (error) {
       res.responseError(error);

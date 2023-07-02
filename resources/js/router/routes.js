@@ -38,6 +38,16 @@ export default [
     component: () => import("../views/ProfileView.vue"),
   },
   {
+    path: "/statistical",
+    name: "statistical",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/StatisticalView.vue"),
+  },
+  {
     path: "/chat",
     name: "chat",
     meta: {

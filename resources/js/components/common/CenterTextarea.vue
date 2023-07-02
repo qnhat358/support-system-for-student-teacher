@@ -1,6 +1,6 @@
 <script setup>
 import { placeholder } from '@babel/types';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 
 const props = defineProps({
   placeholder: {
@@ -40,9 +40,14 @@ const fontSize = computed(() => {
 });
 
 onMounted(() => {
+  input.value = props.modelValue;
   contentEditable.value.addEventListener('input', handleInput);
 });
 
+watch(
+  () => props.modelValue,
+  (newValue) => (input.value = newValue)
+);
 const focusContentEditable = () => {
   contentEditable.value.focus();
 };

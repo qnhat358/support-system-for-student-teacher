@@ -1,97 +1,177 @@
 <script setup>
 import AddQuestionModal from "../components/createExam/AddQuestionModal.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useExamStore } from "@/stores/exam.js";
+import { useRouter, useRoute } from "vue-router";
+import { isImageURL } from '@/composables/checkImageUrl.js'
+import { useNotification } from "@kyvg/vue3-notification";
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 
+const { updateExam, fetchExamDetailById } = useExamStore();
+const { exam, getTotalPoints } = storeToRefs(useExamStore());
+
+const { notify } = useNotification()
+
+const router = useRouter();
+const route = useRoute();
 const isShowModal = ref(false);
-const testInfo = ref({
-  date: '2023-05-22',
-  topic: 'US',
-  id: '12412',
-  start: '14:00',
-  end: '14:30',
+
+const topicOption = [
+  {
+    option: 'Mathematics',
+    value: 'mathematics',
+  },
+  {
+    option: 'Literature',
+    value: 'literature',
+  },
+  {
+    option: 'History',
+    value: 'history',
+  },
+  {
+    option: 'Physics',
+    value: 'physics',
+  },
+  {
+    option: 'Chemistry',
+    value: 'chemistry',
+  },
+  {
+    option: 'English',
+    value: 'english',
+  },
+  {
+    option: 'Informatics',
+    value: 'informatics',
+  },
+  {
+    option: 'Biology',
+    value: 'biology',
+  },
+]
+
+const schema = yup.object().shape({
+  grade: yup.string().required().label('Grade'),
+  name: yup.string().required().label('Name'),
+  topic: yup.string().required().label('Topic'),
+  duration: yup.string().required().label('Duration'),
+});
+
+const id = ref('');
+const handleSubmit = async () => {
+  if (!exam.value.questions.length) {
+    notify({
+      type: 'error',
+      text: "There is no question in this exam!",
+    });
+  }
+  else {
+    await updateExam();
+    router.push({ name: "detailTest", query: { id: id.value } });
+  }
+}
+
+const propQuestion = ref({});
+const handleEditQuestion = (question) => {
+  propQuestion.value = question;
+  isShowModal.value = true;
+}
+const handleAddQuestion = () => {
+  propQuestion.value = null;
+  isShowModal.value = true;
+}
+
+onMounted(async () => {
+  id.value = route.query.id;
+  await fetchExamDetailById(id.value);
 })
-const questions = ref([
-  {
-    question: 'What is my name ?',
-    point: 1,
-    answers: [
-      {
-        answer: 'Nhat',
-        isCorrect: true,
-      },
-      {
-        answer: 'Trung',
-        isCorrect: false,
-      },
-      {
-        answer: 'Heo',
-        isCorrect: false,
-      },
-      {
-        answer: 'Cuong',
-        isCorrect: false,
-      },
-    ]
-  },
-  {
-    question: 'What is my name ?',
-    point: 2,
-    answers: [
-      {
-        answer: 'Nhat',
-        isCorrect: true,
-      },
-      {
-        answer: 'Trung',
-        isCorrect: false,
-      },
-      {
-        answer: 'Heo',
-        isCorrect: false,
-      },
-      {
-        answer: 'Cuong',
-        isCorrect: false,
-      },
-    ]
-  },
-])
 </script>
 
 <template>
-  <AddQuestionModal v-show="isShowModal" @hideModal="isShowModal = false"></AddQuestionModal>
-  <div class="container xl:max-w-6xl mx-auto px-4 py-6">
+  <AddQuestionModal v-if="isShowModal" @hideModal="isShowModal = false" :question="propQuestion"></AddQuestionModal>
+  <Form class="container xl:max-w-6xl mx-auto px-4 py-6" :validation-schema="schema" @submit="handleSubmit">
     <div class="w-full rounded-xl bg-white p-4 shadow-md flex flex-col items-center justify-center">
       <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">TEST INFORMATION</h1>
-      <div class="mt-8 flex flex-row w-10/12 gap-14">
-        <div class="flex flex-col gap-2 w-1/2">
-          <div class="font-semibold flex justify-between items-center">
-            <label for="examDate" class="min-w-fit">Exam date:</label>
-            <input id="examDate" type="date" class="w-[75%] h-7 rounded-md" v-model="testInfo.date" />
-          </div>
-          <div class="font-semibold flex justify-between items-center">
+      <div class="flex gap-10 mb-10">
+        <div class="font-bold flex justify-between items-center gap-5 relative">
+          <label for="grade" class="min-w-fit">Grade:</label>
+          <Field as="select" name="grade" id="grade" class="h-7 rounded-md p-0 px-3 font-medium"
+            placeholder="Select grade" v-model="exam.grade">
+            <option value="" disabled>Grade</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+            <option value="6">6th</option>
+            <option value="7">7th</option>
+            <option value="8">8th</option>
+            <option value="9">9th</option>
+            <option value="10">10th</option>
+            <option value="11">11th</option>
+            <option value="12">12th</option>
+          </Field>
+          <ErrorMessage name="grade" class="absolute -bottom-4 text-red-500 text-xs font-medium" />
+        </div>
+        <div class="font-bold flex gap-5 items-center relative">
+          <label for="examName" class="min-w-fit">Name:</label>
+          <Field name="name" id="examName" type="text" class="w-[90%] h-7 rounded-md" v-model="exam.name" />
+          <ErrorMessage name="name" class="absolute -bottom-4 text-red-500 text-xs font-medium" />
+        </div>
+      </div>
+      <div class="flex flex-row w-10/12 gap-14">
+        <div class="flex flex-col gap-2 w-1/3">
+          <div class="font-semibold flex justify-between items-center relative">
             <label for="examTopic" class="min-w-fit">Exam topic:</label>
-            <select id="examTopic" class="w-[75%] h-7 rounded-md p-0 px-3" v-model="testInfo.topic">
-              <option vaalue="">Choose a topic</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+            <Field as="select" name="topic" id="examTopic" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="exam.topic">
+              <option value="" disabled>Choose a topic</option>
+              <option v-for="(topic, index) in topicOption" :value="topic.value">{{ topic.option }}</option>
+            </Field>
+            <ErrorMessage name="topic" class="absolute -bottom-4 text-red-500 text-xs" />
+          </div>
+          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
+            <label for="examDate" class="min-w-fit">Exam date:</label>
+            <input id="examDate" type="date" class="w-[65%] h-7 rounded-md" v-model="exam.date" />
+          </div>
+
+
+        </div>
+        <div class="flex flex-col gap-2 w-1/3">
+          <div class="font-semibold flex justify-between items-center relative">
+            <label for="examDuration" class="min-w-fit">Exam duration:</label>
+            <Field as="select" name="duration" id="examDuration" class="w-[55%] h-7 rounded-md p-0 px-3"
+              v-model="exam.duration">
+              <option value="" disabled>Duration</option>
+              <option value="5">5 minutes</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">60 minutes</option>
+              <option value="90">90 minutes</option>
+              <option value="120">120 minutes</option>
+            </Field>
+            <ErrorMessage name="duration" class="absolute -bottom-4 text-red-500 text-xs" />
+          </div>
+          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
+            <label for="examStart" class="min-w-fit">Exam start:</label>
+            <input id="examStart" type="time" class="ml-3 w-[55%] h-7 rounded-md" v-model="exam.start" />
+          </div>
+
+        </div>
+        <div class="flex flex-col gap-2 w-1/3">
+          <div class="font-semibold flex justify-between items-center">
+            <label for="examVisibility" class="min-w-fit">Visibility:</label>
+            <select id="examVisibility" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="exam.visibility">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
             </select>
           </div>
-          <div class="font-semibold flex justify-between items-center">
-            <label for="examID" class="min-w-fit">Exam ID:</label>
-            <input id="examID" type="number" class="w-[75%] h-7 rounded-md" v-model="testInfo.id" readonly />
-          </div>
-        </div>
-        <div class="flex flex-col gap-2 w-1/2">
-          <div class="font-semibold flex justify-between items-center">
-            <label for="examStart" class="min-w-fit">Exam start:</label>
-            <input id="examStart" type="time" class="ml-3 w-[75%] h-7 rounded-md" v-model="testInfo.start" />
-          </div>
-          <div class="font-semibold flex justify-between items-center">
+          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examEnd" class="min-w-fit">Exam end:</label>
-            <input id="examEnd" type="time" class="ml-3 w-[75%] h-7 rounded-md" v-model="testInfo.end" />
+            <input id="examEnd" type="time" class="ml-3 w-[65%] h-7 rounded-md" v-model="exam.end" />
           </div>
         </div>
       </div>
@@ -99,25 +179,29 @@ const questions = ref([
     <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center">
       <div class="w-10/12 flex flex-col items-center">
         <div class="w-full flex flex-row justify-between items-center">
-          <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Total questions: {{ questions.length
-          }}
-          </h2>
-          <button
+          <div class="flex flex-row gap-20">
+            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Questions: {{ exam.questions.length
+            }}
+            </h2>
+            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Total points: {{ getTotalPoints }}
+            </h2>
+          </div>
+          <button type="button"
             class="py-2.5 px-5 text-center inline-flex items-center text-sm font-bold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-50 hover:text-[var(--primary)] focus:z-10 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            @click="isShowModal = true"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            @click="handleAddQuestion"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
               stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             New question</button>
         </div>
         <div class="w-full grid grid-cols-1 divide-y">
-          <div v-for="(question, index) in questions" :key="index" class="py-4">
+          <div v-for="(question, index) in exam.questions" :key="index" class="py-4">
             <div class="flex flex-row justify-between items-center">
               <span class="font-bold text-lg">Question {{ index + 1 }}</span>
               <div class="flex items-center gap-2">
                 <select id="questionType"
                   class="w-30 h-12 rounded-md p-0 px-3 focus:ring-[var(--second)] focus:border-[var(--second)] border border-gray-200"
-                  disabled v-model="question.point">
+                  v-model="question.point">
                   <option value="1">1 point</option>
                   <option value="2">2 points</option>
                   <option value="3">3 points</option>
@@ -129,7 +213,7 @@ const questions = ref([
                   <option value="9">9 points</option>
                   <option value="10">10 points</option>
                 </select>
-                <button
+                <button @click="handleEditQuestion(question)" type="button"
                   class="border hover:bg-[var(--second)] p-3 rounded-xl text-[var(--second)] hover:text-white transition-colors ease-in-out duration-300">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -148,7 +232,7 @@ const questions = ref([
               </div>
             </div>
             <div>
-              <p class="text-lg">{{ question.question }}</p>
+              <p class="text-lg">{{ question.content }}</p>
               <div class="grid grid-cols-2 mt-2">
                 <div v-for="(answer, index) in question.answers" :key="index" class="flex flex-row gap-2 items-center">
                   <svg v-if="answer.isCorrect" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -159,8 +243,10 @@ const questions = ref([
                     stroke="red" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-
-                  {{ answer.answer }}
+                  <img v-if="isImageURL(answer.content)" :src="answer.content" class="max-w-[300px]">
+                  <span v-else>
+                    {{ answer.content }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -169,12 +255,13 @@ const questions = ref([
       </div>
     </div>
     <div class="flex justify-end gap-5 mt-4 pr-10">
+      <button type="reset"
+        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Clear</button>
       <button
-        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Edit</button>
-      <button
-        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg">Export</button>
+        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg"
+        type="submit">Save</button>
     </div>
-  </div>
+  </Form>
 </template>
 
 <style lang="scss" scoped></style>

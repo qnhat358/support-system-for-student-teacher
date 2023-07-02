@@ -9,7 +9,7 @@ import moment from 'moment';
 const route = useRoute();
 const { exam, result } = storeToRefs(useExamStore());
 
-const { fetchQuestionByExamId } = useExamStore();
+const { fetchQuestionByExamId, fetchExamDetailById } = useExamStore();
 
 const isShowModal = ref(false);
 const id = ref('');
@@ -60,6 +60,7 @@ const closeModal = () => {
 }
 onMounted(async () => {
   id.value = route.query.id;
+  await fetchExamDetailById(id.value);
   result.value = {};
 })
 </script>

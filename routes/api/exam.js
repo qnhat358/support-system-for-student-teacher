@@ -23,7 +23,7 @@ router.get("/:id/questions", examController.getQuestionByExamId);
 router.get("/join/:id", examController.join);
 router.post("/submit", examController.submit);
 router.put(
-  "/update",
+  "/update/:id",
   validate(updateExamValidation),
   authenticateRole(["admin", "teacher"]),
   examController.update

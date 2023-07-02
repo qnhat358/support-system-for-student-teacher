@@ -14,7 +14,7 @@ const router = useRouter();
 const handleDetail = async (id) => {
   exam.value = {};
   await fetchExamDetailById(id);
-  router.push({ name: "detailTest" });
+  router.push({ name: "detailTest", query:{ id } });
 }
 
 onMounted(async () => {

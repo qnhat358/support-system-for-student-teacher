@@ -7,6 +7,6 @@ const router = createRouter({
   routes: routes
 });
 
-// registerGuard(router);
+registerGuard(router);
 
 export default router

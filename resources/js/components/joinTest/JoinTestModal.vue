@@ -24,73 +24,6 @@ const props = defineProps({
 
 const emit = defineEmits(["hideModal"]);
 
-// const questions = ref([
-//   {
-//     question: 'What is\n my name ?',
-//     point: 1,
-//     type: 'multiple choice',
-//     answers: [
-//       {
-//         content: 'Nhat',
-//       },
-//       {
-//         content: 'Trung',
-//       },
-//       {
-//         content: 'Heo',
-//       },
-//       {
-//         content: 'Cuong',
-//       },
-//     ]
-//   },
-//   {
-//     question: 'What is my name ?',
-//     point: 2,
-//     type: 'multiple choice',
-//     answers: [
-//       {
-//         content: 'Nhat',
-//         checked: false,
-//       },
-//       {
-//         content: 'Trung',
-//         checked: false,
-//       },
-//       {
-//         content: 'Heo',
-//         checked: false,
-//       },
-//       {
-//         content: 'Cuong',
-//         checked: false,
-//       },
-//     ]
-//   },
-//   {
-//     question: 'What is my name 3?',
-//     point: 2,
-//     type: 'multiple choice',
-//     answers: [
-//       {
-//         content: 'Nhat',
-//         checked: false,
-//       },
-//       {
-//         content: 'Trung',
-//         checked: false,
-//       },
-//       {
-//         content: 'Heo',
-//         checked: false,
-//       },
-//       {
-//         content: 'Cuong',
-//         checked: false,
-//       },
-//     ]
-//   },
-// ])
 
 const currentQuestionIndex = ref(0)
 
@@ -131,6 +64,23 @@ const toMinutes = computed(() => {
   return minutes + ' : ' + seconds;
 })
 
+const gridClass = computed(() => {
+  switch (exam.value[currentQuestionIndex.value]?.question?.answers?.length ?? 4) {
+    case 1:
+      return 'grid-cols-1'
+    case 2:
+      return 'grid-cols-2'
+    case 3:
+      return 'grid-cols-3'
+    case 4:
+      return 'grid-cols-4'
+    case 5:
+      return 'grid-cols-5'
+    default:
+      return 'grid-cols-4';
+  }
+})
+
 onMounted(async () => {
   exam.value.timeStart = new Date();
   countDown.value = exam.value.duration * 60
@@ -143,8 +93,9 @@ onMounted(async () => {
     <div class="bg-blue-600 h-1" :style="`width: ${countDownWidth}px`"></div>
   </div>
   <div v-if="loadingModal == 0" class="bg-black w-full h-full fixed z-50 top-0 flex justify-center items-center p-2">
-    <Transition name="slide" mode="in-out">
-      <div class="relative z-10 mb-6 bg-[var(--second)] w-full p-5 rounded-lg text-white text-bold overflow-hidden"
+    <Transition enter-active-class="animate__animated animate__backInRight"
+      leave-active-class="animate__animated animate__slideOutLeft" >
+      <div class="absolute z-10 mb-6 bg-[var(--second)] w-full p-5 rounded-lg text-white text-bold overflow-hidden"
         :key="currentQuestionIndex">
         <div class="w-full flex row">
           <div class="font-bold flex justify-between gap-2 items-center w-1/2">
@@ -152,8 +103,8 @@ onMounted(async () => {
             <select id="questionType" class="w-56 h-7 rounded-md p-0 px-3 bg-[var(--primary)]"
               v-model="exam.questions[currentQuestionIndex].type" disabled>
               <option value="">Choose type</option>
-              <option value="Multiple Choice">Multiple choice</option>
-              <option value="Enter Result">Enter result</option>
+              <option value="multiple choice">Multiple choice</option>
+              <option value="enter result">Enter result</option>
             </select>
             <label for="questionPoint" class="min-w-fit">Points:</label>
             <select id="questionPoint" class="w-30 h-7 rounded-md p-0 px-3 bg-[var(--primary)]"
@@ -181,7 +132,7 @@ onMounted(async () => {
             placeholder="'Type your question here...'" :readOnly="true"
             v-model="exam.questions[currentQuestionIndex].content" />
         </div>
-        <div class="mt-4 flex gap-2 relative">
+        <div class="mt-4 grid gap-2" :class="gridClass">
           <div v-for="(answer, index) in exam.questions[currentQuestionIndex].answers" :key="index"
             :style="{ 'background-color': ANSWER_COLOR[index] }"
             class="h-[350px] grow rounded-2xl p-2 flex flex-col drop-shadow-xl"
@@ -210,30 +161,7 @@ onMounted(async () => {
   </div>
 </template>
 <style lang="scss" scoped>
-.slide-enter-active,
-.slide-leave-active {
-  position: fixed;
-  width: 100%;
-  top: 2rem;
-  left: 0.5rem;
-}
-
-.slide-enter-active {
-  transition: transform 0.6s ease-in-out;
-  z-index: 50;
-  transform: translateX(100%);
-}
-
-.slide-enter-to {
-  z-index: 50;
-  transform: translateX(0%);
-}
-
-.slide-leave-active {
-  z-index: -10;
-}
-
-.slide-leave-to {
-  z-index: -10;
+.animate__animated.animate__backInRight, .animate__animated.animate__slideOutLeft {
+  --animate-duration: 0.8s;
 }
 </style>

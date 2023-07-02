@@ -11,7 +11,6 @@ const { logout } = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 
-const dropdownItems = ["Help Centre", "Shpock + for professionals"];
 const atTopOfPage = ref(true);
 const searchValue = ref(route.query.q ?? "");
 const isShowModal = ref(false);
@@ -143,7 +142,8 @@ onBeforeMount(async () => {
                   >Profile</router-link>
               </li>
               <li class="relative hover:text-black">
-                <a class="block py-3 lg:py-7 px-6 border-b-2 border-transparent">Statistical</a>
+                <router-link :to="{ name: 'statistical' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'statistical'}"
+                  >Statistical</router-link>
               </li>
               <li class="relative hover:text-black">
                 <router-link :to="{ name: 'chat' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'chat'}"

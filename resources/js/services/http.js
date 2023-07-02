@@ -32,33 +32,6 @@ const handleErrorResponse = (error, reject) => {
 };
 
 const handleErrorResponseNotToast = (error, reject) => {
-  // const { setLoadingBar, setLoadingCircleModal } = useLoaderStore();
-  // setLoadingBar(false);
-  // setLoadingCircleModal(false);
-  // if (!error.response) {
-  //   reject(error);
-  //   return;
-  // }
-  // const reponseErrors = error.response.data?.errors;
-  // let errors = [];
-  // if (!reponseErrors || reponseErrors.length === 0) {
-  //   errors = [error.response.data.message];
-  // } else {
-  //   errors = Object.keys(reponseErrors).reduce((currentErrors, key) => currentErrors.concat(reponseErrors[key]), errors);
-  // }
-  // if (error.response.data?.code !== "BAD_REQUEST") {
-  //   setToastMessage({
-  //     icon: "mdi-block-helper",
-  //     show: true,
-  //     timeout: 3000,
-  //     color: 'red-darken-2',
-  //     messages: errors
-  //   });
-  //   reject(error);
-  //   return;
-  // } else {
-  //   reject(errors);
-  // }
   reject(error);
 };
 
@@ -72,20 +45,6 @@ const axiosInstance = axios.create({
   },
   withCredentials: true // add this line to enable sending cookies with cross-site requests
 });
-
-// const refreshToken = async () => {
-//   const {isAuthenticated} = storeToRefs(useAuthStore());
-//   try {
-//     axios.defaults.withCredentials = true;
-//     const response = await axios.post(
-//       `http://127.0.0.1:3000/api${REFRESH_URL}`
-//     );
-//     isAuthenticated.value = true;
-//     return response.data.data;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
 
 // Request interceptor
 axiosInstance.interceptors.request.use(async (request) => {
@@ -123,40 +82,7 @@ axiosInstance.interceptors.response.use(response => response, error => {
 });
 
 const service = {
-  // download(endPoint, params) {
-  //   const { setLoadingBar } = useLoaderStore();
-  //   setLoadingBar(true);
-  //   return new Promise((resolve, reject) => {
-  //     axiosInstance
-  //       .post(`${endPoint}`, params, { responseType: 'blob' })
-  //       .then((response) => {
-  //         const contentDispositions = response.headers['content-disposition'].split(';');
-  //         let fileName = '';
-  //         if (contentDispositions.length > 2) {
-  //           fileName = contentDispositions[2].split('\'\'')[1];
-  //         } else {
-  //           fileName = contentDispositions[1].split('=')[1];
-  //         }
-  //         const blob = new Blob([response.data], { type: 'application/octet-stream' });
-  //         const link = document.createElement('a');
-  //         link.href = URL.createObjectURL(blob);
-  //         link.download = decodeURIComponent(fileName);
-  //         document.body.appendChild(link);
-  //         link.click();
-  //         link.remove();
-  //         handleOkResponse(response, resolve);
-  //       })
-  //       .catch((error) => {
-  //         error.response.data.text().then(value => {
-  //           error.response.data = JSON.parse(value);
-  //           handleErrorResponse(error, reject);
-  //         });
-  //       });
-  //   });
-  // },
   get (endPoint, params) {
-    // const { setLoadingBar } = useLoaderStore();
-    // setLoadingBar(true);
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`${endPoint}`, { params, paramsSerializer: params => { return qs.stringify(params) } })
@@ -169,8 +95,6 @@ const service = {
     });
   },
   post (endPoint, params, isToast = true) {
-    // const { setLoadingBar } = useLoaderStore();
-    // setLoadingBar(true);
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`${endPoint}`, params)
@@ -187,8 +111,6 @@ const service = {
     });
   },
   put (endPoint, params) {
-    // const { setLoadingBar } = useLoaderStore();
-    // setLoadingBar(true);
     return new Promise((resolve, reject) => {
       axiosInstance
         .put(`${endPoint}`, params)
@@ -201,8 +123,6 @@ const service = {
     });
   },
   delete (endPoint) {
-    // const { setLoadingBar } = useLoaderStore();
-    // setLoadingBar(true);
     return new Promise((resolve, reject) => {
       axiosInstance
         .delete(`${endPoint}`)

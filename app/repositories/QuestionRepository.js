@@ -4,6 +4,38 @@ class QuestionRepository {
     return await DB.executeQuery("SELECT * FROM questions");
   }
   
+  async selectById(questionId) {
+    const selectQuery = `
+      SELECT * FROM questions WHERE id = $1 AND is_deleted = false;
+    `;
+  
+    const selectValues = [
+      questionId,
+    ];
+  
+    const result = await DB.executeQuery(selectQuery, selectValues);
+    return result[0];
+  }
+
+  async update(question) {
+    const updateQuery = `
+      UPDATE questions
+      SET type = $1, point = $2, content = $3
+      WHERE id = $4
+      RETURNING *
+    `;
+  
+    const updateValues = [
+      question.type,
+      question.point,
+      question.content,
+      question.id,
+    ];
+  
+    const result = await DB.executeQuery(updateQuery, updateValues);
+    return result[0];
+  }
+
   async create (examId, question) {
     const insertQuery = `
       INSERT INTO questions (exam_id, type, point, content)

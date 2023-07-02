@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
       socket.leave(roomId);
     }
   );
-  // Leave a video call room
+
   socket.on('leaveChatRoom', () => {
     const { user, roomId } = socket;
     if (roomId && videoCallRooms.has(roomId)) {
@@ -134,17 +134,6 @@ io.on('connection', (socket) => {
     // Relay the call signal to the recipient user in the same room
     socket.broadcast.emit('answer',  signal);
   });
-  socket.on('requestRemoteStreams', () => {
-    console.log(11);
-    // Relay the call signal to the recipient user in the same room
-    socket.broadcast.emit('requestRemoteStreams');
-  });
-  socket.on('remoteStream', ({stream}) => {
-    console.log(33);
-    console.log(stream);
-    // Relay the call signal to the recipient user in the same room
-    socket.broadcast.emit('remoteStream', stream);
-  });
 
   // Leave a video call room
   socket.on('leaveVideoCallRoom', () => {
@@ -182,16 +171,3 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`Production server running at http://localhost:${port}`);
 });
-// if (process.env.NODE_ENV === 'development') {
-//   const vite = require('vite');
-//   const config = require('./vite.config');
-//   (async () => {
-//     const viteServer = await vite.createServer(config);
-//     app.use(apiRouter);
-//     app.use(viteServer.middlewares);
-//     app.listen(port, () => {
-//       console.log(`Vite development server running at http://localhost:${port}`);
-//     });
-//   })();
-// } else {
-// }

@@ -2,13 +2,43 @@
 import Modal from "@/components/common/Modal.vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { ANSWER_COLOR } from "@/utils/constants";
 import CenterTextarea from "../common/CenterTextarea.vue"
+import { object, string } from "joi";
+import { isImageURL } from '@/composables/checkImageUrl.js'
 
 const { exam } = storeToRefs(useExamStore());
 
-const props = defineProps({});
+const props = defineProps({
+  question: {
+    type: Object,
+    default: () => ({
+      type: 'Multiple Choice',
+      point: '1',
+      content: '',
+      answers: [
+        {
+          content: '',
+          isCorrect: false,
+        },
+        {
+          content: '',
+          isCorrect: false,
+        },
+        {
+          content: '',
+          isCorrect: false,
+        },
+        {
+          content: '',
+          isCorrect: false,
+        },
+      ]
+    })
+  },
+  index: Number,
+});
 
 const emit = defineEmits(["hideModal"]);
 
@@ -71,13 +101,68 @@ const addAnswer = () => {
 }
 
 const handleAddQuestion = () => {
-  exam.value.questions.push(question.value)
+  if (props.question.hasOwnProperty('id')){
+    exam.value.questions = exam.value.questions.map(item => {
+      if (item.id == props.question.id) {
+        item = question.value;
+      }
+      return item;
+    });
+    console.log(exam.value.questions);
+  } else {
+    exam.value.questions.push(question.value)
+  }
   emit("hideModal");
 }
 
 const closeModal = () => {
   emit("hideModal");
 };
+function handleClick (index) {
+  document.getElementsByClassName("fileInput" + index)[0].click();
+}
+
+async function handleFileSelect (event, answerIndex) {
+  const file = event.target.files[0];
+  question.value.answers[answerIndex].content = URL.createObjectURL(file);
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'm1cueo4o');
+
+  try {
+    const response = await fetch('https://api.cloudinary.com/v1_1/qnhat358/image/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+    question.value.answers[answerIndex].content = result.url;
+    event.target.value = ''
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const gridClass = computed(() => {
+  switch (question.value.answers.length) {
+    case 1:
+      return 'grid-cols-1'
+    case 2:
+      return 'grid-cols-2'
+    case 3:
+      return 'grid-cols-3'
+    case 4:
+      return 'grid-cols-4'
+    case 5:
+      return 'grid-cols-5'
+    default:
+      return 'grid-cols-4';
+  }
+})
+
+onMounted(() => {
+  question.value = props.question;
+})
 </script>
 <template>
   <Modal>
@@ -107,7 +192,7 @@ const closeModal = () => {
           class="mt-4 hover:border-4 border-[var(--third)] rounded-lg focus-within:bg-[var(--primary)] text-3xl"
           v-model="question.content" placeholder="'Type your question here...'" />
       </div>
-      <div class="mt-4 flex gap-2 relative">
+      <div class="mt-4 grid gap-2" :class="gridClass">
         <div v-for="(answer, index) in question.answers" :key="index" :style="{ 'background-color': ANSWER_COLOR[index] }"
           class="h-[350px] grow rounded-2xl p-2 flex flex-col drop-shadow-xl">
           <div class="w-full flex flex-row justify-between">
@@ -122,13 +207,16 @@ const closeModal = () => {
                 </svg>
               </button>
               <button
-                class="flex items-center justify-center w-9 h-9 rounded-lg backdrop-brightness-110 hover:backdrop-brightness-125">
+                class="flex items-center justify-center w-9 h-9 rounded-lg backdrop-brightness-110 hover:backdrop-brightness-125"
+                @click="handleClick(index)">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                 </svg>
               </button>
+              <input :class="'fileInput' + index" type="file" style="display: none;"
+                @change="handleFileSelect($event, index)">
             </div>
             <div>
               <input type="checkbox" v-model="answer.isCorrect"
@@ -136,14 +224,18 @@ const closeModal = () => {
                 :style="{ 'background-color': ANSWER_COLOR[index] }" />
             </div>
           </div>
-          <div class="grow p-2">
-            <CenterTextarea
-              class=" h-full focus-within:border-2 border-[var(--third)] rounded-lg focus-within:backdrop-brightness-50 text-3xl"
-              v-model="answer.content" placeholder="'Type an answer option here...'" />
+          <div class="grow p-2 ">
+            <div class="h-full flex flex-col items-center">
+              <img v-if="isImageURL(answer.content)" :src="answer.content" class="max-w-full max-h-full">
+              <CenterTextarea v-else
+                class=" h-full focus-within:border-2 border-[var(--third)] rounded-lg focus-within:backdrop-brightness-50 text-3xl"
+                v-model="answer.content" placeholder="'Type an answer option here...'" />
+            </div>
           </div>
+
         </div>
         <button
-          class="flex justify-center items-center bg-white text-black text-3xl font-bold rounded-full w-12 h-12 absolute ml-8 left-full top-1/2 -translate-y-1/2"
+          class="flex justify-center items-center flex-1 bg-white text-black text-3xl font-bold rounded-full w-12 h-12 absolute ml-8 left-full top-1/2 -translate-y-1/2"
           :class="{ 'cursor-not-allowed': question.answers.length > 4 }" @click="addAnswer">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
             class="w-6 h-6">
