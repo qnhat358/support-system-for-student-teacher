@@ -4,6 +4,19 @@ class AnswerRepository {
     return await DB.executeQuery("SELECT * FROM answers");
   }
 
+  async selectById(id) {
+    const selectQuery = `
+      SELECT * FROM answers WHERE id = $1 AND is_deleted = false;
+    `;
+  
+    const selectValues = [
+      id,
+    ];
+  
+    const result = await DB.executeQuery(selectQuery, selectValues);
+    return result[0];
+  }
+
   async update(answer) {
     const updateQuery = `
       UPDATE answers

@@ -10,6 +10,7 @@ const resultController = require("../../app/controllers/ResultController");
 
 router.get("/users", resultController.getByUserId);
 router.get("/exams/:id", resultController.getByExamId);
+router.get("/getDetailByExamId/:id", resultController.getDetailByExamId);
 router.get("/:id", resultController.getDetailById);
 
 module.exports = router;

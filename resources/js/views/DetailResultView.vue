@@ -4,14 +4,15 @@ import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { useAuthStore } from "@/stores/auth.js";
 import { exportHtmlAsPdf } from "../plugins/pdf";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
-const { fetchExamDetailById } = useExamStore();
-const { exam, getTotalPoints } = storeToRefs(useExamStore());
-const { user } = storeToRefs(useAuthStore());
+const router = useRouter();
+const { fetchResultDetailById } = useExamStore();
+const { exam, result } = storeToRefs(useExamStore());
+const { user } = useAuthStore();
 
-const isShowCorrectAnswer = ref(false);
+const isShowCorrectAnswer = ref(true);
 const isExport = ref(false);
 
 const topicOption = [
@@ -49,13 +50,13 @@ const topicOption = [
   },
 ]
 
-function exportAsPdf() {
+function exportAsPdf () {
   let element = document.getElementById('pdf-content-container');
   exportHtmlAsPdf(element, 'test.pdf', 0);
 }
-onMounted(async()=>{
+onMounted(async () => {
   let id = route.query.id;
-  await fetchExamDetailById(id);
+  await fetchResultDetailById(id);
 })
 </script>
 
@@ -66,11 +67,11 @@ onMounted(async()=>{
       <div class="flex gap-10 mb-10 justify-center">
         <div class="font-bold flex gap-5 items-center">
           <label for="examDate" class="min-w-fit">ID:</label>
-          <input id="examDate" type="text" class="h-7 rounded-md w-12" v-model="exam.id" readonly />
+          <input id="examDate" type="text" class="h-7 rounded-md w-12" v-model="result.exam_id" readonly />
         </div>
         <div class="font-bold flex justify-between items-center gap-5">
           <label for="grade" class="min-w-fit">Grade:</label>
-          <select id="grade" class="h-7 rounded-md p-0 px-3 " placeholder="Select grade" v-model="exam.grade" disabled>
+          <select id="grade" class="h-7 rounded-md p-0 px-3 " placeholder="Select grade" v-model="result.grade" disabled>
             <option value="1">1st</option>
             <option value="2">2nd</option>
             <option value="3">3rd</option>
@@ -87,21 +88,21 @@ onMounted(async()=>{
         </div>
         <div class="font-bold flex gap-5 items-center grow">
           <label for="examDate" class="min-w-fit">Name:</label>
-          <input id="examDate" type="text" class="h-7 rounded-md overflow-hidden" v-model="exam.name" readonly />
+          <input id="examDate" type="text" class="h-7 rounded-md overflow-hidden" v-model="result.name" readonly />
         </div>
       </div>
       <div class="flex flex-row w-10/12 gap-14">
         <div class="flex flex-col gap-2 w-1/3">
           <div class="font-semibold flex justify-between items-center">
             <label for="examTopic" class="min-w-fit">Exam topic:</label>
-            <select id="examTopic" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="exam.topic" disabled>
+            <select id="examTopic" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="result.topic" disabled>
               <option value="" disabled>Choose a topic</option>
               <option v-for="(topic, index) in topicOption" :value="topic.value">{{ topic.option }}</option>
             </select>
           </div>
-          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
+          <div v-show="result.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examDate" class="min-w-fit">Exam date:</label>
-            <input id="examDate" type="date" class="w-[65%] h-7 rounded-md" v-model="exam.date" readonly />
+            <input id="examDate" type="date" class="w-[65%] h-7 rounded-md" v-model="result.date" readonly />
           </div>
 
 
@@ -109,7 +110,7 @@ onMounted(async()=>{
         <div class="flex flex-col gap-2 w-1/3">
           <div class="font-semibold flex justify-between items-center">
             <label for="examDuration" class="min-w-fit">Exam duration:</label>
-            <select id="examDuration" class="w-[55%] h-7 rounded-md p-0 px-3" v-model="exam.duration" disabled>
+            <select id="examDuration" class="w-[55%] h-7 rounded-md p-0 px-3" v-model="result.duration" disabled>
               <option value="5">5 minutes</option>
               <option value="15">15 minutes</option>
               <option value="30">30 minutes</option>
@@ -119,48 +120,52 @@ onMounted(async()=>{
               <option value="120">120 minutes</option>
             </select>
           </div>
-          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
+          <div v-show="result.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examStart" class="min-w-fit">Exam start:</label>
-            <input id="examStart" type="time" class="ml-3 w-[55%] h-7 rounded-md" v-model="exam.start" readonly />
+            <input id="examStart" type="time" class="ml-3 w-[55%] h-7 rounded-md" v-model="result.start" readonly />
           </div>
 
         </div>
         <div class="flex flex-col gap-2 w-1/3">
           <div class="font-semibold flex justify-between items-center">
             <label for="examVisibility" class="min-w-fit">Visibility:</label>
-            <select id="examVisibility" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="exam.visibility" disabled>
+            <select id="examVisibility" class="w-[65%] h-7 rounded-md p-0 px-3" v-model="result.visibility" disabled>
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
           </div>
-          <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
+          <div v-show="result.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examEnd" class="min-w-fit">Exam end:</label>
-            <input id="examEnd" type="time" class="ml-3 w-[65%] h-7 rounded-md" v-model="exam.end" readonly />
+            <input id="examEnd" type="time" class="ml-3 w-[65%] h-7 rounded-md" v-model="result.end" readonly />
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center" id="pdf-content-container">
+    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center"
+      id="pdf-content-container">
       <div class="w-10/12 flex flex-col items-center">
         <div class="w-full flex flex-row justify-between items-center">
           <div class="flex flex-row gap-20">
-            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Questions: {{ exam.questions.length
+            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Questions: {{
+              result.questions.length
             }}
             </h2>
-            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Total points: {{ getTotalPoints }}
+            <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Points: {{ result.point }} / {{
+              result.totalPoint }}
             </h2>
           </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer" v-show="!isExport">
+          <label v-if="user.type == 'student'" class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer"
+              v-show="!isExport">
             <div
-              class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
             </div>
             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show/Hide Correct
               Answer</span>
           </label>
         </div>
         <div class="w-full grid grid-cols-1 divide-y">
-          <div v-for="(question, index) in exam.questions" :key="index" class="py-4">
+          <div v-for="(question, index) in result.questions" :key="index" class="py-4">
             <div class="flex flex-row justify-between items-center">
               <span class="font-bold text-lg">Question {{ index + 1 }}</span>
               <div class="flex items-center gap-2">
@@ -183,8 +188,9 @@ onMounted(async()=>{
             <div>
               <p class="text-lg">{{ question.content }}</p>
               <div class="grid grid-cols-2 mt-2">
-                <div v-for="(answer, index) in question.answers" :key="index" class="flex flex-row gap-2 items-center">
-                  <svg v-if="answer.isCorrect" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                <div v-for="(answer, index) in question.answers" :key="index" class="flex flex-row gap-2 items-center"
+                  :class="{ 'text-red-500 font-bold': isShowCorrectAnswer && answer.is_check && question.is_false, 'text-green-500 font-bold': isShowCorrectAnswer && answer.is_check && !question.is_false }">
+                  <svg v-if="answer.is_correct" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke-width="1.5" stroke="green" class="w-6 h-6" :class="{ 'invisible': !isShowCorrectAnswer }">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
@@ -202,10 +208,12 @@ onMounted(async()=>{
       </div>
     </div>
     <div class="flex justify-end gap-5 mt-4 pr-10">
-      <router-link v-if="user.id == exam.userId" :to="{ name: 'editTest', query: { id: exam.id} }"
-        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg flex items-center" >Edit</router-link>
-      <router-link :to="{ name: 'exportTest', query: { id: exam.id} }"
-        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center" >Export</router-link>
+      <router-link v-if="user.type == 'student'" :to="{ name: 'exportTest', query: { id: result.exam_id } }"
+        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center">Export
+      </router-link>
+      <button v-else @click="router.back()"
+        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center">Go back
+      </button>
     </div>
   </div>
 </template>

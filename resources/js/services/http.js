@@ -19,7 +19,7 @@ const handleErrorResponse = (error, reject) => {
   let errors = [];
   if (!responseErrors || responseErrors.length === 0) {
     errors = [error.response.data.message];
-  } if (responseErrors.constructor  === Array){
+  } if (responseErrors?.constructor  === Array){
     errors = Object.keys(responseErrors).reduce((currentErrors, key) => currentErrors.concat(responseErrors[key]), errors);
   } else errors = [error.response.data.errors]
   errors.forEach(error => {

@@ -16,7 +16,6 @@ function exportHtmlAsPdf(element, fileName, margin = 5) {
     pagebreak: { after: '.page-break-point', avoid: ['.row', '.q-card'] },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'p' }
   };
-  console.log(element);
   return html2pdf(element, options);
 }
 

@@ -80,7 +80,7 @@ const handleEditQuestion = (question) => {
   isShowModal.value = true;
 }
 const handleAddQuestion = () => {
-  propQuestion.value = null;
+  propQuestion.value = undefined;
   isShowModal.value = true;
 }
 

@@ -42,32 +42,33 @@ class ExamService {
   // [POST] /exams/create
   async create (userId, reqExam) {
     const exam = await ExamRepository.create(userId, reqExam);
-    reqExam.questions.map(async (reqQuestion) => {
+    for (let reqQuestion of reqExam.questions){
       const question = await QuestionRepository.create(exam.id, reqQuestion);
-      await reqQuestion.answers.map(async (reqAnswer) => {
+      for (let reqAnswer of reqQuestion.answers) {
         await AnswerRepository.create(question.id, reqAnswer);
-      });
-    });
+      };
+    };
     return exam;
   }
 
   // [PUT] /exams/update
   async update (id, request) {
     const exam = await ExamRepository.update(id, request);
-    request.questions.map(async (reqQuestion) => {
+    for (let reqQuestion of request.questions) {
       const existingQuestion = await QuestionRepository.selectById(reqQuestion.id);
       if (existingQuestion) {
         await QuestionRepository.update(reqQuestion);
-        await reqQuestion.answers.map(async (reqAnswer) => {
+        for (let reqAnswer of reqQuestion.answers) {
           await AnswerRepository.update(reqAnswer);
-        });
+        }
       } else {
         const question = await QuestionRepository.create(exam.id, reqQuestion);
-        await reqQuestion.answers.map(async (reqAnswer) => {
+        for (let reqAnswer of reqQuestion.answers) {
           await AnswerRepository.create(question.id, reqAnswer);
-        });
+        }
       }
-    });
+    }
+    return exam;
   }
 
   // [POST] /exams/submit

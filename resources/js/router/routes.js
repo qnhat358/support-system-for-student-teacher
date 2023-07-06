@@ -63,7 +63,7 @@ export default [
     meta: {
       layout: "DefaultLayout",
       title: "EasyQuiz | Easy Learning",
-      requiresAuth: false,
+      requiresAuth: true,
     },
     component: () => import("../views/VideoCallView.vue"),
   },
@@ -88,6 +88,16 @@ export default [
     component: () => import("../views/ListOfTestView.vue"),
   },
   {
+    path: "/result-list",
+    name: "listOfResult",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/ListOfResultView.vue"),
+  },
+  {
     path: "/question-bank",
     name: "questionBank",
     meta: {
@@ -106,6 +116,16 @@ export default [
       requiresAuth: true,
     },
     component: () => import("../views/DetailTestView.vue"),
+  },
+  {
+    path: "/detail-result",
+    name: "detailResult",
+    meta: {
+      layout: "DefaultLayout",
+      title: "EasyQuiz | Easy Learning",
+      requiresAuth: true,
+    },
+    component: () => import("../views/DetailResultView.vue"),
   },
   {
     path: "/export-test",

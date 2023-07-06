@@ -1,4 +1,5 @@
 const UserRepository = require("../repositories/UserRepository");
+const { index } = require("../../config/algolia");
 
 class UserService {
   // [GET] /users/
@@ -13,8 +14,9 @@ class UserService {
 
   // [GET] /users/
   async update(userId, request) {
-
-    return await UserRepository.update(userId, request);
+    const user = await UserRepository.update(userId, request);
+    await index.saveObject({...user, objectID: user.id});
+    return user;
   }
 }
 module.exports = new UserService();

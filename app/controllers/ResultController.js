@@ -1,7 +1,7 @@
 const ResultService = require('../services/ResultService');
 
 class ResultController {
-  // [GET] /results/getByUserId
+  // [GET] /results/users
   async getByUserId(req, res, next) {
     try {
       const results = await ResultService.getByUserId(req.user.UserId);
@@ -16,6 +16,16 @@ class ResultController {
     const id = req.params.id;
     try {
       const results = await ResultService.getByExamId(id);
+      res.responseSuccess(results);
+    } catch (error) {
+      res.responseError(error);
+    }
+  }
+  // [GET] /results/getDetailByExamId/:id
+  async getDetailByExamId(req, res, next) {
+    const id = req.params.id;
+    try {
+      const results = await ResultService.getDetailByExamId(id);
       res.responseSuccess(results);
     } catch (error) {
       res.responseError(error);

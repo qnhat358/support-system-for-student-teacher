@@ -34,7 +34,6 @@ class UserRepository {
       "SELECT * FROM users WHERE users.username = $1",
       [username]
     );
-    console.log(username);
 
     //TODO: move to service
     if (!user.length) {

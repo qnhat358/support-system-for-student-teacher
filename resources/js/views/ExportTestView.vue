@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { exportHtmlAsPdf } from "../plugins/pdf";
 
-const { exam, getTotalPoints } = storeToRefs(useExamStore());
+const { exam } = storeToRefs(useExamStore());
+const { fetchExamDetailById } = useExamStore();
 
-const router = useRouter();
+const route = useRoute();
 const isShowCorrectAnswer = ref(false);
 const isExport = ref(false);
 
@@ -51,6 +52,10 @@ function exportAsPdf () {
   let fileName = exam.value.name.replace(/\s/g, "") + '.pdf';
   exportHtmlAsPdf(element, fileName, 0);
 }
+onMounted(async()=>{
+  let id = route.query.id;
+  await fetchExamDetailById(id);
+})
 </script>
 
 <template>

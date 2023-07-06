@@ -4,7 +4,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { useRouter } from "vue-router";
-import {isImageURL} from '@/composables/checkImageUrl.js'
+import { isImageURL } from '@/composables/checkImageUrl.js'
 import { useNotification } from "@kyvg/vue3-notification";
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
@@ -12,7 +12,7 @@ import * as yup from 'yup';
 const { createExam } = useExamStore();
 const { exam, getTotalPoints } = storeToRefs(useExamStore());
 
-const { notify }  = useNotification()
+const { notify } = useNotification()
 
 const router = useRouter();
 const isShowModal = ref(false);
@@ -60,15 +60,15 @@ const schema = yup.object().shape({
 });
 
 const handleSubmit = async () => {
-  if( !exam.value.questions.length ){
+  if (!exam.value.questions.length) {
     notify({
       type: 'error',
       text: "There is no question in this exam!",
     });
   }
-  else{
+  else {
     await createExam();
-    router.push({ name: "detailTest" });
+    router.push({ name: "detailTest", query: { id: exam.value.id } });
   }
 }
 </script>
@@ -81,7 +81,8 @@ const handleSubmit = async () => {
       <div class="flex gap-10 mb-10">
         <div class="font-bold flex justify-between items-center gap-5 relative">
           <label for="grade" class="min-w-fit">Grade:</label>
-          <Field as="select" name="grade" id="grade" class="h-7 rounded-md p-0 px-3 font-medium" placeholder="Select grade" v-model="exam.grade">
+          <Field as="select" name="grade" id="grade" class="h-7 rounded-md p-0 px-3 font-medium"
+            placeholder="Select grade" v-model="exam.grade">
             <option value="" disabled>Grade</option>
             <option value="1">1st</option>
             <option value="2">2nd</option>
@@ -96,12 +97,12 @@ const handleSubmit = async () => {
             <option value="11">11th</option>
             <option value="12">12th</option>
           </Field>
-          <ErrorMessage name="grade" class="absolute -bottom-4 text-red-500 text-xs font-medium"/>
+          <ErrorMessage name="grade" class="absolute -bottom-4 text-red-500 text-xs font-medium" />
         </div>
         <div class="font-bold flex gap-5 items-center relative">
           <label for="examName" class="min-w-fit">Name:</label>
           <Field name="name" id="examName" type="text" class="w-[90%] h-7 rounded-md" v-model="exam.name" />
-          <ErrorMessage name="name" class="absolute -bottom-4 text-red-500 text-xs font-medium"/>
+          <ErrorMessage name="name" class="absolute -bottom-4 text-red-500 text-xs font-medium" />
         </div>
       </div>
       <div class="flex flex-row w-10/12 gap-14">
@@ -112,7 +113,7 @@ const handleSubmit = async () => {
               <option value="" disabled>Choose a topic</option>
               <option v-for="(topic, index) in topicOption" :value="topic.value">{{ topic.option }}</option>
             </Field>
-            <ErrorMessage name="topic" class="absolute -bottom-4 text-red-500 text-xs"/>
+            <ErrorMessage name="topic" class="absolute -bottom-4 text-red-500 text-xs" />
           </div>
           <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examDate" class="min-w-fit">Exam date:</label>
@@ -124,7 +125,8 @@ const handleSubmit = async () => {
         <div class="flex flex-col gap-2 w-1/3">
           <div class="font-semibold flex justify-between items-center relative">
             <label for="examDuration" class="min-w-fit">Exam duration:</label>
-            <Field as="select" name="duration" id="examDuration" class="w-[55%] h-7 rounded-md p-0 px-3" v-model="exam.duration">
+            <Field as="select" name="duration" id="examDuration" class="w-[55%] h-7 rounded-md p-0 px-3"
+              v-model="exam.duration">
               <option value="" disabled>Duration</option>
               <option value="5">5 minutes</option>
               <option value="15">15 minutes</option>
@@ -134,7 +136,7 @@ const handleSubmit = async () => {
               <option value="90">90 minutes</option>
               <option value="120">120 minutes</option>
             </Field>
-            <ErrorMessage name="duration" class="absolute -bottom-4 text-red-500 text-xs"/>
+            <ErrorMessage name="duration" class="absolute -bottom-4 text-red-500 text-xs" />
           </div>
           <div v-show="exam.visibility == 'private'" class="font-semibold flex justify-between items-center">
             <label for="examStart" class="min-w-fit">Exam start:</label>
@@ -224,7 +226,7 @@ const handleSubmit = async () => {
                     stroke="red" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                  <img v-if="isImageURL(answer.content)" :src="answer.content" class="max-w-[300px]">
+                  <img v-if="isImageURL(answer?.content??'')" :src="answer.content" class="max-w-[300px]">
                   <span v-else>
                     {{ answer.content }}
                   </span>
@@ -236,8 +238,8 @@ const handleSubmit = async () => {
       </div>
     </div>
     <div class="flex justify-end gap-5 mt-4 pr-10">
-      <button type="reset" class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg"
-        >Clear</button>
+      <button type="reset"
+        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Clear</button>
       <button
         class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg"
         type="submit">Submit</button>

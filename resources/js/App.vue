@@ -56,7 +56,7 @@ const declineVideoCall = () => {
   <!-- Layout component -->
   <PreLoader></PreLoader>
   <notifications />
-  <Transition name="incoming-call" enter-active-class="animate__animated animate__slideInDown" leave-active-class="animate__animated animate__slideOutUp">
+  <Transition name="incoming-call" enter-active-class="animate__animated animate__slideInDown">
     <div v-if="callerName"
       class="fixed flex justify-between row items-center z-50 p-3 top-2 right-2 w-[400px] bg-blue-100 rounded-xl border"
     >

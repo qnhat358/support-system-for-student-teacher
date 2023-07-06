@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import http from '../services/http'
 import { useLoaderStore } from "@/stores/loader";
 
-import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL, EXAM_BY_ID_URL, QUESTION_BY_EXAM_ID_URL, JOIN_EXAM_URL, SUBMIT_EXAM_URL, EXAM_PUBLIC_URL, STATISTICAL_URL, UPDATE_EXAM_URL } from '../services/apiUrls'
+import { CREATE_EXAM_URL, EXAM_BY_USERID_URL, EXAM_DETAIL_BY_ID_URL, EXAM_BY_ID_URL, QUESTION_BY_EXAM_ID_URL, JOIN_EXAM_URL, SUBMIT_EXAM_URL, EXAM_PUBLIC_URL, STATISTICAL_URL, UPDATE_EXAM_URL, RESULT_BY_USER_ID_URL, RESULT_DETAIL_BY_ID_URL, RESULT_DETAIL_BY_EXAM_ID_URL } from '../services/apiUrls'
 export const useExamStore = defineStore('exam', {
   state: () => ({
     exam: {
@@ -19,7 +19,20 @@ export const useExamStore = defineStore('exam', {
       ]
     },
     exams: [],
-    result: {},
+    results: [],
+    result: {
+      id: '',
+      grade: '',
+      name: '',
+      topic: '',
+      duration: '',
+      visibility: 'public',
+      date: '',
+      start: '',
+      end: '',
+      questions: [
+      ]
+    },
     dataStatistical: [],
   }),
   getters: {
@@ -100,6 +113,49 @@ export const useExamStore = defineStore('exam', {
       }
       finally { setLoadingModal(false); }
     },
+
+    async fetchResultsByUserId () {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${RESULT_BY_USER_ID_URL}`
+        );
+        this.results = response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+
+    async fetchResultsDetailByExamId (id) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${RESULT_DETAIL_BY_EXAM_ID_URL}`.replace(":id", id)
+        );
+        return response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+
+    async fetchResultDetailById (id) {
+      const { setLoadingModal } = useLoaderStore();
+      setLoadingModal(true);
+      try {
+        const response = await http.get(
+          `${RESULT_DETAIL_BY_ID_URL}`.replace(":id", id)
+        );
+        this.result = response.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+      finally { setLoadingModal(false); }
+    },
+
     async fetchPublicExams () {
       const { setLoadingModal } = useLoaderStore();
       setLoadingModal(true);

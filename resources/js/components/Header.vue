@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth.js";
 
 const { isAuthenticated } = storeToRefs(useAuthStore());
-const { logout } = useAuthStore();
+const { logout, user } = useAuthStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -141,7 +141,7 @@ onBeforeMount(async () => {
                 <router-link :to="{ name: 'profile' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'profile'}"
                   >Profile</router-link>
               </li>
-              <li class="relative hover:text-black">
+              <li v-if="user.type == 'teacher'" class="relative hover:text-black">
                 <router-link :to="{ name: 'statistical' }" class="block py-3 lg:py-7 px-6 border-b-2 border-transparent" :class="{'active': currentRouteName == 'statistical'}"
                   >Statistical</router-link>
               </li>

@@ -16,3 +16,6 @@ export const JOIN_EXAM_URL = "/exams/join/:id";
 export const SUBMIT_EXAM_URL = "/exams/submit";
 export const CHAT_URL = "/chats";
 export const STATISTICAL_URL = "/results/exams/:id";
+export const RESULT_BY_USER_ID_URL = "/results/users";
+export const RESULT_DETAIL_BY_ID_URL = "/results/:id";
+export const RESULT_DETAIL_BY_EXAM_ID_URL = "/results/getDetailByExamId/:id";

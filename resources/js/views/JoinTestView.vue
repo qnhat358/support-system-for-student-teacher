@@ -130,25 +130,23 @@ onMounted(async () => {
             <tbody>
               <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th class="px-6 py-4">
-                  {{ result.total_point }}
+                  {{ result.total_point }}/{{ exam.totalPoint }}
                 </th>
                 <td class="px-6 py-4">
-                  {{result.total_question}}
+                  {{ result.total_question }}/{{ exam?.questions?.length }}
                 </td>
                 <td class="px-6 py-4">
-                  {{moment(result.time_start).format('DD/MM/YYYY - HH:mm:ss')}}
+                  {{ moment(result.time_start).format('DD/MM/YYYY - HH:mm:ss') }}
                 </td>
                 <td class="px-6 py-4">
-                  {{moment(result.time_end).format('DD/MM/YYYY - HH:mm:ss')}}
+                  {{ moment(result.time_end).format('DD/MM/YYYY - HH:mm:ss') }}
                 </td>
               </tr>
             </tbody>
           </table>
-          <button
-            class="px-5 py-2 mt-10 mr-10 self-end bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg"
-            @click="goHome">
-            Go Home
-          </button>
+          <router-link :to="{ name: 'home' }"
+            class="px-5 py-2 mt-10 mr-10 self-end bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg">Go Home
+          </router-link>
         </div>
 
       </div>

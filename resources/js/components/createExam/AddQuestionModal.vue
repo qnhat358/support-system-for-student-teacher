@@ -101,7 +101,7 @@ const addAnswer = () => {
 }
 
 const handleAddQuestion = () => {
-  if (props.question.hasOwnProperty('id')){
+  if (props.question?.hasOwnProperty('id')){
     exam.value.questions = exam.value.questions.map(item => {
       if (item.id == props.question.id) {
         item = question.value;
@@ -144,7 +144,7 @@ async function handleFileSelect (event, answerIndex) {
 }
 
 const gridClass = computed(() => {
-  switch (question.value.answers.length) {
+  switch (question.value?.answers?.length) {
     case 1:
       return 'grid-cols-1'
     case 2:

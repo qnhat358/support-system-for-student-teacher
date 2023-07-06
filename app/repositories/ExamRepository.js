@@ -6,10 +6,22 @@ class ExamRepository {
 
   async getById(id) {
     const result = await DB.executeQuery(
-      "SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1 AND is_deleted = false",
+      "SELECT id, user_id, name, topic, grade, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1 AND is_deleted = false",
       [id]
     );
-    return result[0];
+    const row = result[0];
+    return{
+      id: row.id,
+      grade: row.grade,
+      name: row.name,
+      topic: row.topic,
+      duration: row.duration,
+      visibility: row.is_public ? "public" : "private",
+      date: row.date,
+      start: row.start,
+      end: row.end,
+      totalPoint: row.total_point,
+    };
   }
 
   async create(userId, exam) {
@@ -36,7 +48,7 @@ class ExamRepository {
 
   async getByUserId(userId) {
     const query = `
-      SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
+      SELECT id, user_id, name, topic, grade, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start, exam_end, total_point
       FROM exams
       WHERE user_id = $1 AND is_deleted = false ORDER BY id ASC
     `;
@@ -62,11 +74,13 @@ class ExamRepository {
     const query = `
   SELECT
     exams.id AS exam_id,
+    exams.user_id,
     exams.grade,
     exams.name AS exam_name,
     exams.topic,
     exams.duration,
     exams.is_public,
+    exams.total_point,
     TO_CHAR(exams.date, 'YYYY-MM-DD') AS date,
     exams.exam_start,
     exams.exam_end,
@@ -86,13 +100,16 @@ class ExamRepository {
     const values = [id];
     // Assuming you have set up a database connection and executed the query
     const results = await DB.executeQuery(query, values);
+    console.log(results[0]);
     const exam = {
       id: results[0].exam_id,
+      userId: results[0].user_id,
       grade: results[0].grade,
       name: results[0].exam_name,
       topic: results[0].topic,
       duration: results[0].duration,
       visibility: results[0].is_public ? "public" : "private",
+      totalPoint: results[0].total_point,
       date: results[0].date,
       start: results[0].exam_start,
       end: results[0].exam_end,

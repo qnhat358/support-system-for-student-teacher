@@ -68,6 +68,7 @@ const startCall = async () => {
       console.log('signal');
       socket.value.emit('call', {
         signal, 
+        roomId: videoCallRoomId.value,
         callerId: user.value.id,
         callerName: user.value.fullname,
         avatar: user.value.avatar_url
@@ -76,16 +77,34 @@ const startCall = async () => {
 
     peer.on('close', () => {
       console.log('close');
-      socket.value.emit('leaveVideoCallRoom')
-      if (peers[socket.value.id] === peer) {
-        delete peers[socket.value.id];
-      }
-      if (remotePeer.value) {
-        remotePeer.value.destroy();
-      }
+      // socket.value.emit('leaveVideoCallRoom')
+      // // Stop local stream
+      // if (localStream.value) {
+      //   localStream.value.getTracks().forEach(track => track.stop());
+      //   localStream.value = null;
+      // }
+      // // Close the peer connection
+      // if (remotePeer.value) {
+      //   remotePeer.value.destroy();
+      //   remotePeer.value = null;
+      //   peer = null;
+      // }
+      emit('close');
     });
 
     socket.value.on('userLeft', (data) => {
+      // Stop local stream
+      console.log('userLeft');
+      if (localStream.value) {
+        localStream.value.getTracks().forEach(track => track.stop());
+        localStream.value = null;
+      }
+      // Close the peer connection
+      if (remotePeer.value) {
+        remotePeer.value.destroy();
+        remotePeer.value = null;
+        peer = null;
+      }
       peer.destroy();
     })
 

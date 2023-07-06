@@ -1,8 +1,12 @@
 const DB = require('../../config/database.js');
 class AnswerSubmissionRepository {
   async getById (id) {
-    const result = await DB.executeQuery("SELECT id, user_id, name, topic, duration, is_public, TO_CHAR(date, 'YYYY-MM-DD') AS date, exam_start AS start, exam_end AS end, total_point FROM exams WHERE id = $1", [id]);
+    const result = await DB.executeQuery("SELECT * FROM answer_submissions WHERE id = $1", [id]);
     return result[0];
+  }
+  async getByQuestionSubId (id) {
+    const result = await DB.executeQuery("SELECT true_answer_id, is_checked FROM public.answer_submissions WHERE question_id = $1", [id]);
+    return result;
   }
 
   async create (question_id, answer) {

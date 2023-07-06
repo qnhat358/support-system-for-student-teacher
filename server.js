@@ -77,7 +77,6 @@ io.on('connection', (socket) => {
       .catch((error) => {
         console.error('Error storing message:', error);
       });
-    console.log(data);
   });
 
   socket.on('leaveChat', () => {
@@ -125,8 +124,23 @@ io.on('connection', (socket) => {
 
   // Handle call signals
   socket.on('call', ( data ) => {
-    // Relay the call signal to the recipient user in the same room
+    console.log('call');
     console.log(data);
+    let roomId = data.roomId;
+    let userId = data.callerId;
+    socket.join(roomId);
+    socket.userId = userId;
+    socket.roomId = roomId;
+
+    if (!videoCallRooms.has(roomId)) {
+      videoCallRooms.set(roomId, new Set());
+    }
+
+    videoCallRooms.get(roomId).add(userId);
+
+    // Emit initial user list to the newly joined user
+    const userList = Array.from(videoCallRooms.get(roomId));
+    // Relay the call signal to the recipient user in the same room
     socket.broadcast.emit('call', data);
   });
   // Handle call signals

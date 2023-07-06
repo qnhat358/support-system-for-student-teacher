@@ -1,7 +1,7 @@
 const UserRepository = require("../repositories/UserRepository");
 const TokenService = require("./TokenService");
 const RefreshTokenRepository = require("../repositories/RefreshTokenRepository");
-const index = require("../../config/algolia");
+const { index } = require("../../config/algolia");
 const {
   ForbiddenException,
   BadRequestException,
@@ -22,15 +22,7 @@ class AuthService {
     const hashPassword = await bcrypt.hash(password, saltRounds);
     const user = await UserRepository.addUser(username, hashPassword, type);
     const authTokens = await TokenService.generateAuthTokens(user);
-    index.saveObjects(user)
-      .then(({ objectIDs }) => {
-        console.log('Records saved to Algolia:', objectIDs);
-        // Handle the success response as needed
-      })
-      .catch((error) => {
-        console.error('Error saving records to Algolia:', error);
-        // Handle the error as needed
-      });
+    await index.saveObject({...user, objectID: user.id});
     return {
       user,
       authTokens,
@@ -61,7 +53,11 @@ class AuthService {
     }
     const user = TokenService.verifyRefreshToken(token);
     await RefreshTokenRepository.delete(token);
-    const authTokens = await TokenService.generateAuthTokens(user);
+    const authTokens = await TokenService.generateAuthTokens({
+      id: user.UserId,
+      type: user.UserType,
+      created_at: user.JoinDate
+    });
     return authTokens;
   }
 

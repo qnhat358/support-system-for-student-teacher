@@ -13,7 +13,6 @@ const formData = ref({});
 const isEditing = ref(false);
 
 function handleClick () {
-  console.log(formData.value.avatar_url);
   document.getElementsByClassName("fileInput")[0].click();
 }
 

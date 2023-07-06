@@ -2,11 +2,13 @@
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
+import { useAuthStore } from "@/stores/auth.js";
 import { useRouter } from "vue-router";
 import useDetectOutsideClick from "../composables/useDetectOutsideClick";
 
 const { getExamsByTopic, exam } = storeToRefs(useExamStore());
 const { fetchPublicExams, fetchExamById } = useExamStore();
+const { user } = storeToRefs(useAuthStore());
 
 const router = useRouter();
 
@@ -52,240 +54,6 @@ const topics = [
   },
 ]
 
-const allTests = ref([
-  {
-    topic: 'Mathematics',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'Literature',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'History',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'Physics',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'Chemistry',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'Informatics',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-  {
-    topic: 'English',
-    test: [
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-      {
-        content: 'Content 1',
-        totalQuestion: 10,
-      },
-    ]
-  },
-])
-
 const changeTopic = (topic) => {
   searchForm.value.topic = topic;
   isShowDropdown.value = false;
@@ -299,14 +67,16 @@ const toggleExpand = (index) => {
 }
 
 const handleDetail = async (id) => {
-  exam.value = {};
-  await fetchExamById(id);
-  router.push({ name: 'joinTest', query: {id}});
+  if (user.value.type == 'teacher') {
+    router.push({ name: 'detailTest', query: { id } });
+  } else if (user.value.type == 'student') {
+    router.push({ name: 'joinTest', query: { id } });
+  }
 }
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-} 
+function capitalizeFirstLetter (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 useDetectOutsideClick(dropdownRef, () => {
   isShowDropdown.value = false;
@@ -363,7 +133,8 @@ onMounted(async () => {
         <div v-for="(exam, index) in getExamsByTopic" :key="index" class="text-center flex flex-col items-center">
           <div
             class="bg-[var(--primary)] hover:brightness-90 rounded-full p-3 aspect-square w-[80px] flex items-center justify-center">
-            <img :src="`/assets/images/${capitalizeFirstLetter(exam.topic)}.png`" class="w-[50px] cursor-pointer" alt="..." />
+            <img :src="`/assets/images/${capitalizeFirstLetter(exam.topic)}.png`" class="w-[50px] cursor-pointer"
+              alt="..." />
           </div>
           <span class="font-medium">{{ capitalizeFirstLetter(exam.topic) }}</span>
         </div>
