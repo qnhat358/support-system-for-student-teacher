@@ -31,6 +31,7 @@ import SimplePeer from 'simple-peer';
 import { useVideoCallStore } from "../stores/videoCall";
 import { useAuthStore } from "../stores/auth";
 import { storeToRefs } from "pinia";
+import { BE_BASE_URL } from "@/utils/constants";
 
 const { videoCallRoomId, callerName, avatar } = storeToRefs(useVideoCallStore());
 const { user } = storeToRefs(useAuthStore());
@@ -40,6 +41,8 @@ const localVideo = ref(null);
 const showLocalVideo = ref(false);
 const remoteVideo = ref(null);
 const showRemoteVideo = ref(false);
+const enableMic = ref(true);
+const enableVideo = ref(true);
 const peers = {};
 let peer;
 const localStream = ref(null);
@@ -67,7 +70,7 @@ const startCall = async () => {
     peer.on('signal', (signal) => {
       console.log('signal');
       socket.value.emit('call', {
-        signal, 
+        signal,
         roomId: videoCallRoomId.value,
         callerId: user.value.id,
         callerName: user.value.fullname,
@@ -135,7 +138,7 @@ const endCall = () => {
 }
 
 onMounted(async () => {
-  socket.value = io('http://127.0.0.1:3000');
+  socket.value = io(BE_BASE_URL);
   socket.value.on('call', async (data) => {
     callerName.value = data.callerName;
     avatar.value = data.avatar

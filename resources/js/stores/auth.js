@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import http from '../services/http'
 import axios from 'axios'
+import { API_BASE_URL } from "@/utils/constants";
 import { useLoaderStore } from "@/stores/loader";
 import { notify } from "@kyvg/vue3-notification";
 
@@ -37,7 +37,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         // axios.defaults.withCredentials = true;
         const response = await axios.post(
-          `http://127.0.0.1:3000/api${LOGIN_URL}`, this.loginForm
+          `${API_BASE_URL}${LOGIN_URL}`, this.loginForm
         );
         localStorage.setItem('accessToken', response.data.data.accessToken);
         this.user = response.data.data.user;
@@ -73,7 +73,7 @@ export const useAuthStore = defineStore('auth', {
       setLoadingModal(true);
       try {
         const response = await axios.post(
-          `http://127.0.0.1:3000/api${REGISTER_URL}`, this.registerForm
+          `${API_BASE_URL}${REGISTER_URL}`, this.registerForm
         );
         localStorage.setItem('accessToken', response.data.data.accessToken);
         this.user = response.data.data.user;
@@ -109,7 +109,7 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false;
         axios.defaults.withCredentials = true;
         const response = await axios.post(
-          `http://127.0.0.1:3000/api${LOGOUT_URL}`
+          `${API_BASE_URL}${LOGOUT_URL}`
         );
       } catch (err) {
         console.log(err);
@@ -123,7 +123,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.post(
-          `http://127.0.0.1:3000/api${REFRESH_URL}`
+          `${API_BASE_URL}${REFRESH_URL}`
         );
         this.isAuthenticated = true;
         return response.data.data;

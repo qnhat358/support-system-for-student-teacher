@@ -8,6 +8,7 @@ import { useChatStore } from "../stores/chat";
 import { useAuthStore } from "../stores/auth";
 import { toHHMMstring, toISOdate } from "../composables/dateTimeConvert";
 import moment from 'moment';
+import { BE_BASE_URL } from "@/utils/constants";
 const route = useRoute();
 
 const { exam } = storeToRefs(useExamStore());
@@ -34,7 +35,7 @@ const joinChatRoom = async () => {
   updateScroll();
 
   // Establish Socket.IO connection
-  socket = io('http://127.0.0.1:3000');
+  socket = io(BE_BASE_URL);
 
   // Join the chat room
   socket.on('connect', () => {

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { BE_BASE_URL } from "@/utils/constants";
 import algoliasearch from 'algoliasearch';
 import io from 'socket.io-client';
 import { useChatStore } from "../stores/chat";
@@ -84,7 +85,7 @@ const joinChatRoom = async (receiver) => {
   updateScroll();
 
   // Establish Socket.IO connection
-  socket = io('http://127.0.0.1:3000');
+  socket = io(BE_BASE_URL);
 
   // Join the chat room
   socket.on('connect', () => {
