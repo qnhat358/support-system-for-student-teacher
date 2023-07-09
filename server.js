@@ -16,7 +16,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "http://127.0.0.1:3001", // replace with your origin
+    origin: ["http://127.0.0.1:3001", "http://localhost:3001"], // replace with your origin
     credentials: true, // enable credentials
   })
 );
@@ -182,6 +182,6 @@ io.on('connection', (socket) => {
 
 });
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Production server running at http://localhost:${port}`);
 });

@@ -78,7 +78,7 @@ const joinChatRoom = async (receiver) => {
     socket?.emit('leaveChat');
   }
   chatUser.value = receiver;
-  roomName.value = padNumberWithZeros(user.value.id, chatUser.value.user_id);
+  roomName.value = padNumberWithZeros(user.value.id, chatUser.value.id);
   const response = await getRoomId(roomName.value);
   roomId.value = response.roomId;
   messages.value = response.messages.reverse();

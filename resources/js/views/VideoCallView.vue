@@ -16,10 +16,38 @@
           d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M12 18.75H4.5a2.25 2.25 0 01-2.25-2.25V9m12.841 9.091L16.5 19.5m-1.409-1.409c.407-.407.659-.97.659-1.591v-9a2.25 2.25 0 00-2.25-2.25h-9c-.621 0-1.184.252-1.591.659m12.182 12.182L2.909 5.909M1.5 4.5l1.409 1.409" />
       </svg>
     </button>
+    <button @click="toggleMic"
+      class="absolute z-50 top-10 left-1/2 -translate-x-1/2 rounded-full bg-gray-500 p-4 text-white">
+      <svg v-if="enableMic" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M6 12c0-2.209 1.791-4 4-4s4 1.791 4 4m-8 0a4 4 0 108 0m-8 0h8" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M15 10v2a3 3 0 01-3 3H9a3 3 0 01-3-3v-2m6 0h2m-2 0a2 2 0 100-4m0 4a2 2 0 100-4M9 10H7m2 0a2 2 0 110-4m0 4a2 2 0 110-4" />
+      </svg>
+      <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    </button>
+
+    <button @click="toggleVideo"
+      class="absolute z-50 top-20 left-1/2 -translate-x-1/2 rounded-full bg-gray-500 p-4 text-white">
+      <svg v-if="enableVideo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 11a2 2 0 114 0 2 2 0 01-4 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M20 9.8V4a2 2 0 00-2-2H6a2 2 0 00-2 2v5.8M6 21h12a2 2 0 002-2V4a2 2 0 00-2-2H6a2 2 0 00-2 2v15a2 2 0 002 2z" />
+      </svg>
+      <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </button>
     <video v-show="showLocalVideo" ref="localVideo" autoplay class="absolute bottom-0 right-0 w-1/4"></video>
     <img v-if="!showLocalVideo" src="@assets/images/Video-Placeholder.png"
       class="absolute bottom-0 right-0 w-1/4 border-2 border-black" />
-    <video v-show="showRemoteVideo" ref="remoteVideo" class="w-full" autoplay></video>
+    <video v-show="showRemoteVideo" ref="remoteVideo" class="w-full"></video>
     <img v-if="!showRemoteVideo" src="@assets/images/Video-Placeholder.png" class="w-full h-full border-2 border-black" />
   </div>
 </template>
@@ -48,12 +76,33 @@ let peer;
 const localStream = ref(null);
 const emit = defineEmits(["close"]);
 const remotePeer = ref(null)
+
+const toggleMic = () => {
+  enableMic.value = !enableMic.value;
+  if (localStream.value) {
+    const audioTracks = localStream.value.getAudioTracks();
+    if (audioTracks.length > 0) {
+      audioTracks[0].enabled = enableMic.value;
+    }
+  }
+};
+
+const toggleVideo = () => {
+  enableVideo.value = !enableVideo.value;
+  if (localStream.value) {
+    const videoTracks = localStream.value.getVideoTracks();
+    if (videoTracks.length > 0) {
+      videoTracks[0].enabled = enableVideo.value;
+    }
+  }
+};
+
 const startCall = async () => {
   try {
     if (!localStream.value) {
       await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false
+        video: enableVideo.value,
+        audio: enableMic.value
       }).then((stream) => {
         localStream.value = stream;
       })
@@ -94,6 +143,10 @@ const startCall = async () => {
       // }
       emit('close');
     });
+
+    socket.value.on('close', ()=>{
+      emit('close');
+    })
 
     socket.value.on('userLeft', (data) => {
       // Stop local stream
@@ -146,7 +199,7 @@ onMounted(async () => {
       if (!localStream.value) {
         await navigator.mediaDevices.getUserMedia({
           video: true,
-          audio: false
+          audio: true
         }).then((stream) => {
           localStream.value = stream;
         })
@@ -162,10 +215,11 @@ onMounted(async () => {
         socket.value.emit('answer', signalData);
       });
 
-      remotePeer.value.on('stream', (stream) => {
+      remotePeer.value.on('stream', async (stream) => {
         console.log('remote stream');
+        remoteVideo.value.srcObject = await stream;
+        await remoteVideo.value.play();
         showRemoteVideo.value = true;
-        remoteVideo.value.srcObject = stream;
       });
 
       remotePeer.value.on('close', () => {
