@@ -11,7 +11,6 @@ const examController = require("../../app/controllers/ExamController");
 router.get("/", examController.index);
 router.post(
   "/create",
-  validate(createExamValidation),
   authenticateRole(["admin", "teacher"]),
   examController.create
 );
@@ -24,7 +23,6 @@ router.get("/join/:id", examController.join);
 router.post("/submit", examController.submit);
 router.put(
   "/update/:id",
-  validate(updateExamValidation),
   authenticateRole(["admin", "teacher"]),
   examController.update
 );

@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { useExamStore } from "@/stores/exam.js";
 import { useRoute } from "vue-router";
 import { exportHtmlAsPdf } from "../plugins/pdf";
+import { isImageURL } from '@/composables/checkImageUrl.js'
 
 const { exam } = storeToRefs(useExamStore());
 const { fetchExamDetailById } = useExamStore();
@@ -100,8 +101,11 @@ onMounted(async()=>{
                     stroke="red" class="w-6 h-6" :class="{ 'invisible': !isShowCorrectAnswer }">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-
-                  {{ answerHeader[index] + '. ' + answer.content }}
+                  <img v-if="isImageURL(answer?.content ?? '')" :src="answer.content" class="max-w-[300px]">
+                  <span v-else>
+                    {{ answerHeader[index] + '. ' + answer.content }}
+                  </span>
+                  
                 </div>
               </div>
             </div>

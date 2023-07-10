@@ -4,10 +4,11 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth.js";
 import { useExamStore } from "@/stores/exam.js";
 import { useLoaderStore } from "@/stores/loader";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { ANSWER_COLOR } from "@/utils/constants";
 import CenterTextarea from "../common/CenterTextarea.vue"
+import { isImageURL } from '@/composables/checkImageUrl.js'
 
 const { exam } = storeToRefs(useExamStore());
 const { submit } = useExamStore();
@@ -84,8 +85,13 @@ const gridClass = computed(() => {
 onMounted(async () => {
   exam.value.timeStart = new Date();
   countDown.value = exam.value.duration * 60
+  countDown.value = 20;
   countDownTimer();
 })
+
+onUnmounted(() => {
+  clearTimeout(timer.value);
+});
 </script>
 
 <template>
@@ -103,8 +109,8 @@ onMounted(async () => {
             <select id="questionType" class="w-56 h-7 rounded-md p-0 px-3 bg-[var(--primary)]"
               v-model="exam.questions[currentQuestionIndex].type" disabled>
               <option value="">Choose type</option>
-              <option value="multiple choice">Multiple choice</option>
-              <option value="enter result">Enter result</option>
+              <option value="Multiple Choice">Multiple choice</option>
+              <option value="Enter Result">Enter result</option>
             </select>
             <label for="questionPoint" class="min-w-fit">Points:</label>
             <select id="questionPoint" class="w-30 h-7 rounded-md p-0 px-3 bg-[var(--primary)]"
@@ -144,11 +150,14 @@ onMounted(async () => {
                   :style="{ 'background-color': ANSWER_COLOR[index] }" />
               </div>
             </div>
-            <div class="grow p-2">
-              <CenterTextarea
-                class=" h-full focus-within:border-2 border-[var(--third)] rounded-lg focus-within:backdrop-brightness-50 text-3xl"
-                :readOnly="true" v-model="answer.content" />
+            <div class="grow p-2 ">
+            <div class="h-full flex flex-col items-center">
+              <img v-if="isImageURL(answer.content)" :src="answer.content" class="max-w-full max-h-full">
+              <CenterTextarea v-else
+                class=" h-full focus-within:border-2 border-[var(--third)] rounded-lg focus-within:backdrop-brightness-50 text-3xl cursor-pointer"
+                v-model="answer.content" placeholder="'Type an answer option here...'" :readOnly="true" />
             </div>
+          </div>
           </div>
         </div>
         <div class="flex justify-end gap-4 mt-4 text-xl font-bold">

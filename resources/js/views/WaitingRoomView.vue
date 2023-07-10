@@ -165,7 +165,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <router-link :to="{ name: 'joinTest', query: { id } }"
+    <router-link :to="{ name: 'joinTest', query: { id } }" v-if="user.type == 'student'"
       class="mt-10 w-[300px] p-2 bg-white text-[var(--primary)] text-2xl font-bold rounded-lg border border-[var(--primary)] shadow-lg self-center text-center">
       Start
     </router-link>

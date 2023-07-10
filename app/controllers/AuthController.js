@@ -36,6 +36,7 @@ class AuthController {
 
       const { password, ...others } = user;
       res.cookie("refreshToken", authTokens.refreshToken, {
+        maxAge: 60 * 60 * 1000 * 24,
         httpOnly: true,
         secure: true,
         sameSite: "none",

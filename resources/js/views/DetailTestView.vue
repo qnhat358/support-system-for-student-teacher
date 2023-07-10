@@ -5,6 +5,7 @@ import { useExamStore } from "@/stores/exam.js";
 import { useAuthStore } from "@/stores/auth.js";
 import { exportHtmlAsPdf } from "../plugins/pdf";
 import { useRoute } from "vue-router";
+import { isImageURL } from '@/composables/checkImageUrl.js'
 
 const route = useRoute();
 const { fetchExamDetailById } = useExamStore();
@@ -49,11 +50,11 @@ const topicOption = [
   },
 ]
 
-function exportAsPdf() {
+function exportAsPdf () {
   let element = document.getElementById('pdf-content-container');
   exportHtmlAsPdf(element, 'test.pdf', 0);
 }
-onMounted(async()=>{
+onMounted(async () => {
   let id = route.query.id;
   await fetchExamDetailById(id);
 })
@@ -140,7 +141,8 @@ onMounted(async()=>{
         </div>
       </div>
     </div>
-    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center" id="pdf-content-container">
+    <div class="mt-10 w-full rounded-xl bg-white p-4 shadow-md flex flex-col justify-center items-center"
+      id="pdf-content-container">
       <div class="w-10/12 flex flex-col items-center">
         <div class="w-full flex flex-row justify-between items-center">
           <div class="flex flex-row gap-20">
@@ -151,7 +153,8 @@ onMounted(async()=>{
             </h2>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer" v-show="!isExport">
+            <input type="checkbox" value="" class="sr-only peer" @click="isShowCorrectAnswer = !isShowCorrectAnswer"
+              v-show="!isExport">
             <div
               class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
             </div>
@@ -193,7 +196,10 @@ onMounted(async()=>{
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
 
-                  {{ answer.content }}
+                  <img v-if="isImageURL(answer?.content ?? '')" :src="answer.content" class="max-w-[300px]">
+                  <span v-else>
+                    {{ answer.content }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -202,10 +208,10 @@ onMounted(async()=>{
       </div>
     </div>
     <div class="flex justify-end gap-5 mt-4 pr-10">
-      <router-link v-if="user.id == exam.userId" :to="{ name: 'editTest', query: { id: exam.id} }"
-        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg flex items-center" >Edit</router-link>
-      <router-link :to="{ name: 'exportTest', query: { id: exam.id} }"
-        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center" >Export</router-link>
+      <router-link v-if="user.id == exam.userId" :to="{ name: 'editTest', query: { id: exam.id } }"
+        class="px-5 bg-white text-[var(--primary)] font-bold rounded-lg border border-[var(--primary)] shadow-lg flex items-center">Edit</router-link>
+      <router-link :to="{ name: 'exportTest', query: { id: exam.id } }"
+        class="w-24 p-2 bg-[var(--primary)] rounded-lg text-white font-bold border border-[var(--primary)] shadow-lg text-center">Export</router-link>
     </div>
   </div>
 </template>

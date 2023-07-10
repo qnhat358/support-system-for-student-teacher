@@ -71,11 +71,7 @@ onMounted(async () => {
     <div class="w-full rounded-xl bg-white p-4 shadow-md flex flex-col items-center justify-center">
       <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">TEST INFORMATION</h1>
       <div class="mt-8 flex flex-row w-10/12 gap-14">
-        <div class="flex flex-col gap-2 w-1/2">
-          <div class="font-semibold flex justify-between items-center">
-            <label for="examDate" class="min-w-fit">Exam date:</label>
-            <input id="examDate" type="date" class="w-[75%] h-7 rounded-md" v-model="exam.date" readonly />
-          </div>
+        <div class="flex gap-2" :class="[exam.visibility == 'private' ? 'flex-col w-1/2' : 'flex-row w-full justify-evenly']">
           <div class="font-semibold flex justify-between items-center">
             <label for="examTopic" class="min-w-fit">Exam topic:</label>
             <select id="examTopic" class="w-[75%] h-7 rounded-md p-0 px-3" v-model="exam.topic" disabled>
@@ -88,7 +84,11 @@ onMounted(async () => {
             <input id="examID" type="number" readonly class="w-[75%] h-7 rounded-md" v-model="exam.id" />
           </div>
         </div>
-        <div class="flex flex-col gap-2 w-1/2">
+        <div v-if="exam.visibility == 'private'" class="flex flex-col gap-2 w-1/2">
+          <div  class="font-semibold flex justify-between items-center">
+            <label for="examDate" class="min-w-fit">Exam date:</label>
+            <input id="examDate" type="date" class="w-[75%] h-7 rounded-md" v-model="exam.date" readonly />
+          </div>
           <div class="font-semibold flex justify-between items-center">
             <label for="examStart" class="min-w-fit">Exam start:</label>
             <input id="examStart" type="time" class="ml-3 w-[75%] h-7 rounded-md" v-model="exam.start" readonly />
