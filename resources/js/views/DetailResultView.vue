@@ -200,7 +200,7 @@ onMounted(async () => {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
 
-                  <img v-if="isImageURL(answer?.content ?? '')" :src="answer.content" class="max-w-[300px]">
+                  <img v-if="isImageURL(answer?.content ?? '')" :src="answer.content" class="max-w-[300px]" :class="{ 'border-red-500 border': isShowCorrectAnswer && answer.is_check && question.is_false, 'border-green-500 border': isShowCorrectAnswer && answer.is_check && !question.is_false }">
                   <span v-else>
                     {{ answer.content }}
                   </span>

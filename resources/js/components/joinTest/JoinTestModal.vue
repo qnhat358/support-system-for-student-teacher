@@ -85,7 +85,6 @@ const gridClass = computed(() => {
 onMounted(async () => {
   exam.value.timeStart = new Date();
   countDown.value = exam.value.duration * 60
-  countDown.value = 20;
   countDownTimer();
 })
 

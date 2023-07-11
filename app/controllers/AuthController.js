@@ -58,6 +58,7 @@ class AuthController {
     try {
       const authTokens = await AuthService.requestRefreshToken(refreshToken);
       res.cookie("refreshToken", authTokens.refreshToken, {
+        maxAge: 60 * 60 * 1000 * 24,
         httpOnly: true,
         secure: true,
         sameSite: "none",

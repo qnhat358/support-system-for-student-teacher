@@ -158,7 +158,7 @@ onMounted(async () => {
             <div :class="{ hidden: expandId != index }">
               <div class="py-5 border-b border-gray-200 dark:border-gray-700">
                 <div v-for="(test, index) in topic.exams" :key="index"
-                  class="flex flex-row justify-between hover:bg-gray-400 px-2" @click="handleDetail(test.id)">
+                  class="flex flex-row justify-between hover:bg-gray-400 px-2 cursor-pointer" @click="handleDetail(test.id)">
                   <span class="mb-2 text-gray-500 dark:text-gray-400">{{ test.name }}</span>
                   <span class="mb-2 text-gray-500 dark:text-gray-400">Grade: {{ test.grade }}</span>
                 </div>
